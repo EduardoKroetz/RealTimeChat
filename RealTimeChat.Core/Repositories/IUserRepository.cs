@@ -5,9 +5,9 @@ namespace RealTimeChat.Core.Repositories;
 
 public interface IUserRepository
 {
-    Task<User> GetByIdAsync(int userId);
+    Task<User?> GetByIdAsync(Guid userId);
     Task AddAsync(User user);
     Task UpdateAsync(User user);
-    Task DeleteAsync(int userId);
-    Task<IEnumerable<User>> GetUsersInRoomAsync(int chatRoomId);
+    Task DeleteAsync(User user);
+    Task<IEnumerable<User>> GetUsersInRoomAsync(Guid chatRoomId);
 }

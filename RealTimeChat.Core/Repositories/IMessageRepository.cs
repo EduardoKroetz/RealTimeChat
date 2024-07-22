@@ -4,10 +4,10 @@ namespace RealTimeChat.Core.Repositories;
 
 public interface IMessageRepository
 {
-    Task<Message> GetByIdAsync(int messageId);
+    Task<Message?> GetByIdAsync(Guid messageId);
     Task AddAsync(Message message);
     Task UpdateAsync(Message message);
-    Task DeleteAsync(int messageId);
-    Task<IEnumerable<Message>> GetMessagesByRoomIdAsync(int chatRoomId);
-    Task<IEnumerable<Message>> GetMessagesBySenderIdAsync(int senderId);
+    Task DeleteAsync(Message message);
+    Task<IEnumerable<Message>> GetMessagesByRoomIdAsync(Guid chatRoomId);
+    Task<IEnumerable<Message>> GetMessagesBySenderIdAsync(Guid senderId);
 }
