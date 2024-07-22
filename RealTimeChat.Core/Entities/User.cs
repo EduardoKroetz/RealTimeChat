@@ -5,7 +5,7 @@ namespace RealTimeChat.Core.Entities;
 public class User
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(50)]
@@ -20,5 +20,7 @@ public class User
     public string Email { get; set; }
 
     public DateTime CreatedAt { get; set; }
-    public DateTime? LastLogin { get; set; }
+
+    public ICollection<Message> SentMessages { get; set; } = [];
+    public ICollection<RoomParticipant> RoomParticipants { get; set; } = [];
 }

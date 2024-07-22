@@ -7,7 +7,7 @@ namespace RealTimeChat.Core.Entities;
 public class Message
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     public string Content { get; set; }
@@ -15,12 +15,12 @@ public class Message
     public DateTime Timestamp { get; set; }
 
     [ForeignKey("Sender")]
-    public int SenderId { get; set; }
+    public Guid SenderId { get; set; }
 
     public User Sender { get; set; }
 
     [ForeignKey("Room")]
-    public int RoomId { get; set; }
+    public Guid ChatRoomId { get; set; }
 
-    public ChatRoom Room { get; set; }
+    public ChatRoom ChatRoom { get; set; }
 }
