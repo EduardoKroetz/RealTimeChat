@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeChat.API", "RealTimeChat.API\RealTimeChat.API.csproj", "{8C51A403-36E9-45E1-9A07-622F98B41787}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeChat.Data", "RealTimeChat.Data\RealTimeChat.Data.csproj", "{488EB17E-F799-42D5-9455-57FC40ACA1DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeChat.Core", "RealTimeChat.Core\RealTimeChat.Core.csproj", "{B62F38E8-8F74-4AEE-A2E8-2EB09C2AC617}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C51A403-36E9-45E1-9A07-622F98B41787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C51A403-36E9-45E1-9A07-622F98B41787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C51A403-36E9-45E1-9A07-622F98B41787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C51A403-36E9-45E1-9A07-622F98B41787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488EB17E-F799-42D5-9455-57FC40ACA1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488EB17E-F799-42D5-9455-57FC40ACA1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488EB17E-F799-42D5-9455-57FC40ACA1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488EB17E-F799-42D5-9455-57FC40ACA1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B62F38E8-8F74-4AEE-A2E8-2EB09C2AC617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B62F38E8-8F74-4AEE-A2E8-2EB09C2AC617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B62F38E8-8F74-4AEE-A2E8-2EB09C2AC617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B62F38E8-8F74-4AEE-A2E8-2EB09C2AC617}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
