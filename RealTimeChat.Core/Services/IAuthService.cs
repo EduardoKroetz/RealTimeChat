@@ -2,6 +2,7 @@
 
 public interface IAuthService
 {
-    string GenerateJwtToken(string email, string role);
+    string GenerateJwtToken(string email);
     string HashPassword(string password);
+    bool VerifyPassword(string password, string passwordHash);
 }

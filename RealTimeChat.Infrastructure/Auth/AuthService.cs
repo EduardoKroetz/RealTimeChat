@@ -21,14 +21,14 @@ public class AuthService : IAuthService
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public string GenerateJwtToken(string email, string role)
+    public string GenerateJwtToken(string email)
     {
         var key = _configuration["JwtKey"]!;
 
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, role)
+            new Claim(ClaimTypes.Role, "user")
         };
 
         var token = new JwtSecurityToken
@@ -42,5 +42,10 @@ public class AuthService : IAuthService
         var stringToken = tokenHandler.WriteToken(token);
 
         return stringToken;
+    }
+
+    public bool VerifyPassword(string password, string passwordHash)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, passwordHash);
     }
 }

@@ -37,7 +37,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
         await _userRepository.AddAsync(user);
 
-        var token = _authService.GenerateJwtToken(user.Email, "user");
+        var token = _authService.GenerateJwtToken(user.Email);
         return Result.SuccessResult(new { token }, "User registered succesfully");
     }
 }
