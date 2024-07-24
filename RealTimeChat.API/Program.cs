@@ -9,6 +9,8 @@ using RealTimeChat.Core.Services;
 using RealTimeChat.Infrastructure.Auth;
 using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Repositories;
+using RealTimeChat.API.Middlewares;
+using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 
 app.MapControllers();
 
@@ -51,6 +54,9 @@ void ConfigureServices(IServiceCollection services)
     {
         opt.UseSqlServer(Configuration.ConnectionString);
     });
+
+    services.AddExceptionHandler<GlobalExceptionHandler>();
+    services.AddProblemDetails();
 
     //Injetando dependências
     services.AddScoped<IAuthService, AuthService>();
