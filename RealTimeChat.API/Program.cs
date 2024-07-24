@@ -75,3 +75,5 @@ void ConfigureServices(IServiceCollection services)
         };
     });
 }
+
+public class Startup { }

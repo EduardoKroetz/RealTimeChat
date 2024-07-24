@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
 
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] CreateUserCommand command)
-    {
+    {     
         var result = await _mediator.Send(command);
         return Ok(result);
     }
