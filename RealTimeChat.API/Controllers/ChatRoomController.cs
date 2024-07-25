@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Commands.CreateChatRoom;
+using RealTimeChat.Application.Commands.DeleteChatRoom;
 
 namespace RealTimeChat.API.Controllers;
 
@@ -18,6 +19,14 @@ public class ChatRoomController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] CreateChatRoomCommand command)
     {
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+    {
+        var command = new DeleteChatRoomCommand { ChatRoomId = id };
         var result = await _mediator.Send(command);
         return Ok(result);
     }

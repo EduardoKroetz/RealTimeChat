@@ -15,8 +15,4 @@
     <ProjectReference Include="..\RealTimeChat.Core\RealTimeChat.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\DeleteChatRoom\" />
-  </ItemGroup>
-
 </Project>
