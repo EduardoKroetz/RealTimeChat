@@ -8,15 +8,17 @@ namespace RealTimeChat.Application.Commands.CreateChatRoom;
 public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomCommand, Result>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
+    private readonly IRoomParticipantRepository _roomParticipantRepository;
 
-    public CreateChatRoomCommandHandler(IChatRoomRepository chatRoomRepository)
+    public CreateChatRoomCommandHandler(IChatRoomRepository chatRoomRepository, IRoomParticipantRepository roomParticipantRepository)
     {
         _chatRoomRepository = chatRoomRepository;
+        _roomParticipantRepository = roomParticipantRepository;
     }
 
     public async Task<Result> Handle(CreateChatRoomCommand request, CancellationToken cancellationToken)
     {
-        var room = new ChatRoom
+        var chatRoom = new ChatRoom
         {
             Id = Guid.NewGuid(),
             Messages = [],
@@ -26,8 +28,17 @@ public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomComman
             CreatedBy = request.UserId
         };
 
-        await _chatRoomRepository.AddAsync(room);
+        await _chatRoomRepository.AddAsync(chatRoom);
 
-        return Result.SuccessResult(new { id = room.Id }, "Chat room successfully created");
+        var roomParticipant = new RoomParticipant
+        {
+            Id = Guid.NewGuid(),
+            ChatRoomId = chatRoom.Id,
+            UserId = request.UserId
+        };
+
+        await _roomParticipantRepository.AddAsync(roomParticipant);
+
+        return Result.SuccessResult(new { id = chatRoom.Id, roomParticipantId = roomParticipant.Id }, "Chat room successfully created");
     }
 }

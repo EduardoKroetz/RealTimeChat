@@ -128,7 +128,7 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
     public async Task JoinChatRoom_ShouldReturnOk()
     {
         // Arrange
-        var userCommand = new CreateUserCommand { Email = "test13@gmail.com", Password = "123", Username = "test1" };
+        var userCommand = new CreateUserCommand { Email = "test131@gmail.com", Password = "123", Username = "test1" };
         var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
         var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
 
@@ -136,8 +136,12 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
         var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
         var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
 
+        var userCommand2 = new CreateUserCommand { Email = "test191@gmail.com", Password = "123", Username = "test191" };
+        var userResponse2 = await _client.PostAsJsonAsync("api/auth/register", userCommand2);
+        var userId2 = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse2.Content.ReadAsStringAsync())!.data.id;
+
         // Act
-        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId}", new { });
+        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId2}", new { });
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -209,5 +213,93 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
 
         var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
         Assert.Equal("This user is already in this chat room", content.message);
+    }
+
+    [Fact]
+    public async Task LeaveChatRoom_ShouldReturnOk()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test11@gmail.com", Password = "123", Username = "test1" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId}", new { });
+
+        // Act
+        var response = await _client.DeleteAsync($"{_baseUrl}/{chatRoomId}/leave/{userId}");
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+
+        Assert.Equal("User leave the chat room successfully", content.message);
+    }
+
+    [Fact]
+    public async Task LeaveChatRoom_WithNonExistingUser_ShouldReturnNotFound()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test111@gmail.com", Password = "123", Username = "test1" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        // Act
+        var response = await _client.DeleteAsync($"{_baseUrl}/{chatRoomId}/leave/{Guid.NewGuid()}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("Room participant not found", content.message);
+    }
+
+    [Fact]
+    public async Task LeaveChatRoom_WithNonExistingChatRoom_ShouldReturnNotFound()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test26@gmail.com", Password = "123", Username = "test2" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        // Act
+        var response = await _client.DeleteAsync($"{_baseUrl}/{Guid.NewGuid()}/leave/{userId}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("Room participant not found", content.message);
+    }
+
+    [Fact]
+    public async Task LeaveChatRoom_WhenNotInChatRoom_ShouldReturnNotFound()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test39@gmail.com", Password = "123", Username = "test3" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        await _client.DeleteAsync($"{_baseUrl}/{chatRoomId}/leave/{userId}"); //leave
+        // Act
+        var response = await _client.DeleteAsync($"{_baseUrl}/{chatRoomId}/leave/{userId}"); //leave again
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("Room participant not found", content.message);
     }
 }

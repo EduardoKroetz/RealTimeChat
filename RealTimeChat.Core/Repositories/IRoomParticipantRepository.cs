@@ -9,5 +9,6 @@ public interface IRoomParticipantRepository
     Task UpdateAsync(RoomParticipant roomParticipant);
     Task DeleteAsync(RoomParticipant roomParticipant);
     Task<IEnumerable<RoomParticipant>> GetParticipantsInRoomAsync(Guid chatRoomId);
+    Task<RoomParticipant?> GetRoomParticipantByRoomAndUserId(Guid chatRoomId, Guid userId);
     Task<IEnumerable<RoomParticipant>> GetRoomsByUserIdAsync(Guid userId);
 }

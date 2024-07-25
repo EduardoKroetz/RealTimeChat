@@ -55,4 +55,11 @@ public class RoomParticipantRepository : IRoomParticipantRepository
             .Include(rp => rp.ChatRoom) 
             .ToListAsync();
     }
+
+    public async Task<RoomParticipant?> GetRoomParticipantByRoomAndUserId(Guid chatRoomId, Guid userId)
+    {
+        return await _dbContext.RoomParticipants
+            .Where(x => x.UserId == userId && x.ChatRoomId == chatRoomId)
+            .FirstOrDefaultAsync();
+    }
 }

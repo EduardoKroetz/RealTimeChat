@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.DeleteChatRoom;
 using RealTimeChat.Application.Commands.JoinChatRoom;
+using RealTimeChat.Application.Commands.LeaveChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.Queries.GetAllChatRooms;
 
@@ -53,6 +54,15 @@ public class ChatRoomsController : ControllerBase
     public async Task<IActionResult> JoinAsync([FromRoute] Guid chatRoomId, [FromRoute] Guid userId)
     {
         var command = new JoinChatRoomCommand { ChatRoomId = chatRoomId, UserId = userId };
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+
+    [HttpDelete("{chatRoomId:guid}/leave/{userId:guid}")]
+    public async Task<IActionResult> LeaveAsync([FromRoute] Guid chatRoomId, [FromRoute] Guid userId)
+    {
+        var command = new LeaveChatRoomCommand { ChatRoomId = chatRoomId, UserId = userId };
         var result = await _mediator.Send(command);
         return Ok(result);
     }
