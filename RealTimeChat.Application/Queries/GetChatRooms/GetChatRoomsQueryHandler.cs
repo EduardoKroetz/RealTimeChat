@@ -23,6 +23,6 @@ public class GetChatRoomsQueryHandler : IRequestHandler<GetChatRoomsQuery, Paged
             new GetChatRoomsViewModel(x.Id, x.Name, x.CreatedAt, x.CreatedBy)
         ).ToList();
 
-        return PagedResult.SuccessResult(selectedChatRooms, request.PageNumber, request.PageSize, selectedChatRooms.Count, "Success");
+        return PagedResult.SuccessResult(selectedChatRooms, request.PageNumber, request.PageSize, selectedChatRooms.Count, "Success!");
     }
 }

@@ -40,11 +40,13 @@ public class ChatRoomRepository : IChatRoomRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Message>> GetMessagesInRoomAsync(Guid chatRoomId)
+    public async Task<IEnumerable<Message>> GetMessagesInRoomAsync(int skip, int take, Guid chatRoomId)
     {
         return await _dbContext.Messages
             .Where(m => m.ChatRoomId == chatRoomId)
             .OrderBy(m => m.Timestamp)
+            .Skip(skip)
+            .Take(take)
             .ToListAsync();
     }
 

@@ -10,5 +10,5 @@ public interface IChatRoomRepository
     Task UpdateAsync(ChatRoom chatRoom);
     Task DeleteAsync(ChatRoom chatRoom);
     Task<IEnumerable<ChatRoom>> GetUserChatRoomsAsync(Guid userId);
-    Task<IEnumerable<Message>> GetMessagesInRoomAsync(Guid chatRoomId);
+    Task<IEnumerable<Message>> GetMessagesInRoomAsync(int skip, int take ,Guid chatRoomId);
 }

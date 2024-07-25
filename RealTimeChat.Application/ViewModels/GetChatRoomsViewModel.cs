@@ -1,5 +1,4 @@
-﻿using RealTimeChat.Core.Entities;
-
+﻿
 namespace RealTimeChat.Application.ViewModels;
 
 public class GetChatRoomsViewModel
