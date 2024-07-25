@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.CreateUser;
+using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.IntegrationTests.Utils;
 using System.Net;
 using System.Net.Http.Json;
@@ -75,5 +76,28 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
 
         var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
         Assert.Equal("Chat room not found", content.message);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldReturnOk()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "teste1000@gmail.com", Password = "123", Username = "teste" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+        var createResult = await _client.PostAsJsonAsync(_baseUrl, new CreateChatRoomCommand { Name = "Bate papo", UserId = userId });
+
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await createResult.Content.ReadAsStringAsync())!.data.id;
+
+        var command = new UpdateChatRoomCommand { Id = chatRoomId, Name = "Bate papo aaa" };
+        // Act
+        var response = await _client.PutAsJsonAsync(_baseUrl, command);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var content = JsonConvert.DeserializeObject<Result<DataId>>(await response.Content.ReadAsStringAsync())!;
+
+        Assert.NotEqual(Guid.Empty, content.data.id);
     }
 }

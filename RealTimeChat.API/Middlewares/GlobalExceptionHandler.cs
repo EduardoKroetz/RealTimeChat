@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using RealTimeChat.Core.DTOs;
+using RealTimeChat.Core.Exceptions;
 using System.Net;
 
 namespace RealTimeChat.API.Middlewares;
@@ -15,7 +16,10 @@ public class GlobalExceptionHandler : IExceptionHandler
         {
             case ArgumentException e:
             case InvalidOperationException:
-                httpContext.Response.StatusCode = 400;
+                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            break;
+            case NotFoundException e:
+                httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
             break;
             case UnauthorizedAccessException e:
                 httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
