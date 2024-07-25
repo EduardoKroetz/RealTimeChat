@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.CreateUser;
+using RealTimeChat.Application.Commands.JoinChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.ViewModels;
 using RealTimeChat.IntegrationTests.Utils;
@@ -13,7 +14,7 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Startup> _factory;
-    private const string _baseUrl = "api/chatroom";
+    private const string _baseUrl = "api/chatrooms";
 
     public ChatRoomControllerTests(CustomWebApplicationFactory<Startup> factory)
     {
@@ -121,5 +122,92 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
 
         Assert.True(content.data.Count > 0);
         Assert.NotNull(content.data);
+    }
+
+    [Fact]
+    public async Task JoinChatRoom_ShouldReturnOk()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test13@gmail.com", Password = "123", Username = "test1" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        // Act
+        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId}", new { });
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+
+        Assert.Equal($"User has successfully entered the chat room", content.message);
+    }
+
+    [Fact]
+    public async Task JoinChatRoom_WithNonExistingUser_ShouldReturnNotFound()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test1@gmail.com", Password = "123", Username = "test1" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        // Act
+        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{Guid.NewGuid()}", new { });
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("User not found", content.message);
+    }
+
+    [Fact]
+    public async Task JoinChatRoom_WithNonExistingChatRoom_ShouldReturnNotFound()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test2@gmail.com", Password = "123", Username = "test2" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        // Act
+        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{Guid.NewGuid()}/join/{userId}", new { });
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("Chat room not found", content.message);
+    }
+
+    [Fact]
+    public async Task JoinChatRoom_WhenAlreadyInChatRoom_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "test3@gmail.com", Password = "123", Username = "test3" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+
+        var chatRoomCommand = new CreateChatRoomCommand { Name = "General", UserId = userId };
+        var chatRoomResponse = await _client.PostAsJsonAsync(_baseUrl, chatRoomCommand);
+        var chatRoomId = JsonConvert.DeserializeObject<Result<DataId>>(await chatRoomResponse.Content.ReadAsStringAsync())!.data.id;
+
+        await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId}", new { }); // First join
+
+        // Act
+        var response = await _client.PostAsJsonAsync($"{_baseUrl}/{chatRoomId}/join/{userId}", new {}); // Second join
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var content = JsonConvert.DeserializeObject<Result<object>>(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal("This user is already in this chat room", content.message);
     }
 }

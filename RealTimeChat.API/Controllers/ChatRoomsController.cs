@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.DeleteChatRoom;
+using RealTimeChat.Application.Commands.JoinChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.Queries.GetAllChatRooms;
 
@@ -9,11 +10,11 @@ namespace RealTimeChat.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ChatRoomController : ControllerBase
+public class ChatRoomsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public ChatRoomController(IMediator mediator)
+    public ChatRoomsController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -48,4 +49,11 @@ public class ChatRoomController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("{chatRoomId:guid}/join/{userId:guid}")]
+    public async Task<IActionResult> JoinAsync([FromRoute] Guid chatRoomId, [FromRoute] Guid userId)
+    {
+        var command = new JoinChatRoomCommand { ChatRoomId = chatRoomId, UserId = userId };
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
 }
