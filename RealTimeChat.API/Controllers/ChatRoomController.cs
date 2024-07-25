@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.DeleteChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
+using RealTimeChat.Application.Queries.GetAllChatRooms;
 
 namespace RealTimeChat.API.Controllers;
 
@@ -15,6 +16,14 @@ public class ChatRoomController : ControllerBase
     public ChatRoomController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAsync([FromQuery] int pageSize, [FromQuery] int pageNumber)
+    {
+        var query = new GetChatRoomsQuery { PageNumber = pageNumber, PageSize = pageSize };
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPost]

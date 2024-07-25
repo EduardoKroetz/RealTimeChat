@@ -2,6 +2,7 @@
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.CreateUser;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
+using RealTimeChat.Application.ViewModels;
 using RealTimeChat.IntegrationTests.Utils;
 using System.Net;
 using System.Net.Http.Json;
@@ -99,5 +100,26 @@ public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory
         var content = JsonConvert.DeserializeObject<Result<DataId>>(await response.Content.ReadAsStringAsync())!;
 
         Assert.NotEqual(Guid.Empty, content.data.id);
+    }
+
+    [Fact]
+    public async Task GetAsync_ShouldReturnOk()
+    {
+        // Arrange
+        var userCommand = new CreateUserCommand { Email = "teste000@gmail.com", Password = "123", Username = "teste" };
+        var userResponse = await _client.PostAsJsonAsync("api/auth/register", userCommand);
+        var userId = JsonConvert.DeserializeObject<Result<DataRegisterUser>>(await userResponse.Content.ReadAsStringAsync())!.data.id;
+        var createResult = await _client.PostAsJsonAsync(_baseUrl, new CreateChatRoomCommand { Name = "Bate papo", UserId = userId });
+
+        // Act
+        var response = await _client.GetAsync($"{_baseUrl}?pageSize=10&pageNumber=1");
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var content = JsonConvert.DeserializeObject<PagedResult<ICollection<GetChatRoomsViewModel>>>(await response.Content.ReadAsStringAsync())!;
+
+        Assert.True(content.data.Count > 0);
+        Assert.NotNull(content.data);
     }
 }
