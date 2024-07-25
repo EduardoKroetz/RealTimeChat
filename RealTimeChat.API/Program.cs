@@ -10,7 +10,7 @@ using RealTimeChat.Infrastructure.Auth;
 using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Repositories;
 using RealTimeChat.API.Middlewares;
-using System.ComponentModel;
+using RealTimeChat.API.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,13 +31,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandler();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
 
@@ -50,6 +55,18 @@ void LoadConfiguration(IConfiguration configuration)
 
 void ConfigureServices(IServiceCollection services)
 {
+
+    services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+    });
+
     services.AddDbContext<RealTimeChatDbContext>(opt =>
     {
         opt.UseSqlServer(Configuration.ConnectionString);
@@ -58,12 +75,15 @@ void ConfigureServices(IServiceCollection services)
     services.AddExceptionHandler<GlobalExceptionHandler>();
     services.AddProblemDetails();
 
+
     //Injetando dependências
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
     services.AddScoped<IMessageRepository, MessageRepository>();
     services.AddScoped<IRoomParticipantRepository, RoomParticipantRepository>();
+
+    services.AddSignalR();
 
     var key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
     services.AddAuthentication(x =>
