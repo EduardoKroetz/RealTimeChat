@@ -56,5 +56,11 @@ public class ChatRoomRepository : IChatRoomRepository
             .ToListAsync();
     }
 
-
+    public async Task<ICollection<ChatRoom>> GetAsync(int skip, int take)
+    {
+        return await _dbContext.ChatRooms
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+    }
 }
