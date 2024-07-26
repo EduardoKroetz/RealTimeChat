@@ -57,4 +57,25 @@ public class UserRepository : IUserRepository
             .Take(take)
             .ToListAsync();
     }
+
+    public async Task<object?> GetUserIncludesRoomParticipants(Guid userId)
+    {
+        return await _context.Users
+            .Include(x => x.RoomParticipants)
+            .ThenInclude(x => x.ChatRoom)
+            .Select(x => new
+            {
+                x.Id,
+                x.Username,
+                x.Email,
+                x.CreatedAt,
+                RoomParticipants = x.RoomParticipants.Select(r => new
+                {
+                    r.Id,
+                    r.ChatRoomId,
+                    ChatRoomName = r.ChatRoom.Name
+                })
+            })
+            .FirstOrDefaultAsync(x => x.Id == userId);
+    }
 }

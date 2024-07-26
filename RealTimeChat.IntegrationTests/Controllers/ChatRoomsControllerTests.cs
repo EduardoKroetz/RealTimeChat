@@ -10,13 +10,13 @@ using System.Net.Http.Json;
 
 namespace RealTimeChat.IntegrationTests.Controllers;
 
-public class ChatRoomControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+public class ChatRoomsControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Startup> _factory;
     private const string _baseUrl = "api/chatrooms";
 
-    public ChatRoomControllerTests(CustomWebApplicationFactory<Startup> factory)
+    public ChatRoomsControllerTests(CustomWebApplicationFactory<Startup> factory)
     {
         _client = factory.CreateClient();
         _factory = factory;

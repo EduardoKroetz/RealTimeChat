@@ -12,4 +12,5 @@ public interface IUserRepository
     Task UpdateAsync(User user);
     Task DeleteAsync(User user);
     Task<IEnumerable<User>> GetUsersInRoomAsync(Guid chatRoomId);
+    Task<object?> GetUserIncludesRoomParticipants(Guid userId);
 }
