@@ -49,4 +49,12 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public async Task<IEnumerable<User>> GetAsync(int skip, int take)
+    {
+        return await _context.Users
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+    }
 }
