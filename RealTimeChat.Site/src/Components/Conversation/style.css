@@ -1,0 +1,13 @@
+.conversation-container
+{
+  height: 30px;
+  padding: 1rem;
+  border-radius: .3rem;
+}
+
+.conversation-container:hover
+{
+  transition: 300ms;
+  background-color: rgba(255, 255, 255, 0.492);
+
+}
