@@ -1,5 +1,5 @@
 
-export default interface Message
+export default interface IMessage
 {
   id: string,
   content: string,

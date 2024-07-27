@@ -1,5 +1,5 @@
 
-export default interface ChatRoom
+export default interface IChatRoom
 {
   id: string,
   name: string,

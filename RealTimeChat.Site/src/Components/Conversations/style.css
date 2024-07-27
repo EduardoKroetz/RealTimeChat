@@ -6,4 +6,15 @@
   display: flex;
   flex-direction: column;
   gap: .2rem;
+  border-right: 1px solid gray;
+}
+
+@media (min-width: 768px)
+{
+  .conversations-container
+  {
+    flex: none;
+    width: 30%;
+  }
+
 }

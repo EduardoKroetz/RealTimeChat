@@ -14,9 +14,7 @@ export default function Conversations()
     const getUserChatRooms = async () =>
     {
       var response = await api.get("/chatrooms/users/e0c60f68-bf1a-4236-8161-956a190306bb");
-      console.log(response)
       setChatRooms(response.data.data);
-      console.log(chatRooms)
     }
 
     getUserChatRooms();
@@ -27,7 +25,7 @@ export default function Conversations()
       {chatRooms.map((chatRoom) => 
       (
         <div key={chatRoom.id}>
-          <Conversation chatRoomName={chatRoom.name} />
+          <Conversation chatRoomName={chatRoom.name} chatRoomId={chatRoom.id} />
         </div>
       )
       )}
