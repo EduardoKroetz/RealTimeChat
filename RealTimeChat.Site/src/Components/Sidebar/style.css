@@ -1,0 +1,15 @@
+.sidebar-container
+{
+  background-color: gray;
+  width: 100vw;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.sidebar-title
+{
+  font-size: large;
+}
+
