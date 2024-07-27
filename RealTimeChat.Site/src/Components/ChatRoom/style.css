@@ -1,0 +1,14 @@
+.chatroom-container
+{
+  width: 300px;
+  background-color: black;
+}
+
+
+@media (min-width: 768px)
+{
+  .chatroom-container
+  {
+    flex: 1;
+  }
+}
