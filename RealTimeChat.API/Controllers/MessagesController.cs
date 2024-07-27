@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RealTimeChat.Application.Queries.GetMessage;
 using RealTimeChat.Application.Queries.GetMessages;
 
 namespace RealTimeChat.API.Controllers;
@@ -23,4 +24,11 @@ public class MessagesController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{messageId:guid}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid messageId)
+    {
+        var query = new GetMessageQuery { MessageId = messageId };
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
 }
