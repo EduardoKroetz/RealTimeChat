@@ -6,6 +6,7 @@ using RealTimeChat.Application.Commands.JoinChatRoom;
 using RealTimeChat.Application.Commands.LeaveChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.Queries.GetAllChatRooms;
+using RealTimeChat.Application.Queries.GetChatRoom;
 using RealTimeChat.Application.Queries.GetUserChatRooms;
 
 namespace RealTimeChat.API.Controllers;
@@ -19,6 +20,14 @@ public class ChatRoomsController : ControllerBase
     public ChatRoomsController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet("{chatRoomId:guid}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid chatRoomId)
+    {
+        var query = new GetChatRoomQuery { ChatRoomId = chatRoomId };
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpGet]
