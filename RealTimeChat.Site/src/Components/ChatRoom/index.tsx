@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api/axiosConfig";
-import IMessage from "../../Interfaces/Message";
-import IChatRoom from "../../Interfaces/ChatRoom";
+import IMessage from "../../Interfaces/IMessage";
+import IChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css"
 import { ScreenWidthContext } from "../../Contexts/ScreenWidthContext";
+import Message from "../Message";
 
 async function GetMessagesFromChatRoom(pageNumber: number, pageSize: number, chatRoomId: string) : Promise<IMessage[]>
 {
@@ -50,9 +51,7 @@ export default function ChatRoom()
       <div className="chatroom-messages">
       {messages.map((msg) => 
         (
-          <div>
-            {msg.content}
-          </div>
+          <Message chatRoomId={msg.chatRoomId} content={msg.content} id={msg.id} senderId={msg.senderId} timestamp={msg.timestamp}/>
         ))}
       </div>
 

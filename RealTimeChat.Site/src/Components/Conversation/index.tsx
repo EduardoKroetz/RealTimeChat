@@ -11,7 +11,7 @@ export default function Conversation({ chatRoomName, chatRoomId } : Conversation
 {
 
   return (
-    <Link to={`/chatrooms/${chatRoomId}`} >
+    <Link to={`/chatrooms/${chatRoomId}`} key={chatRoomId}>
       <div className="conversation-container">
         <h2>{chatRoomName}</h2>
       </div>

@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import api from "../../api/axiosConfig"
-import ChatRoom from "../../Interfaces/ChatRoom";
+import ChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css"
 import Conversation from "../Conversation";
 

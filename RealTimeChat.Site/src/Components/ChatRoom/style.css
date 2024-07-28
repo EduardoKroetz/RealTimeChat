@@ -34,4 +34,7 @@
 .chatroom-messages
 {
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
 }
