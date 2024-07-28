@@ -3,6 +3,9 @@
   width: 300px;
   background-color: rgba(0, 0, 0, 0.729);
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .chatroom-info
@@ -37,4 +40,5 @@
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
+  flex: 1;
 }

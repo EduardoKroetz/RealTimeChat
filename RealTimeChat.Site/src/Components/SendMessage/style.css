@@ -1,0 +1,50 @@
+.send-message-container
+{
+  padding: .5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.send-message-input
+{
+  border: 0;
+  padding: 1rem;
+  background-color: gray;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.send-message-input::placeholder
+{
+  color: rgb(196, 195, 195);
+}
+
+.send-message-input:focus
+{
+  border: 0px solid black;
+  outline: none;
+}
+
+.send-message-button
+{
+  padding: 15px;
+  background-color: green;
+  border: 0;
+  border-radius: 5px;
+}
+
+.send-message-button:hover
+{
+  cursor: pointer;
+}
+
+
+
+@media (min-width: 768px)
+{
+  .send-message-input
+  {
+    font-size: large
+  }
+}
