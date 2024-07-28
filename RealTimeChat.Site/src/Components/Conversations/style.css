@@ -9,10 +9,17 @@
   border-right: 1px solid gray;
 }
 
+.arrow-left
+{
+  width: 30px;
+  color: white;
+}
+
 @media (min-width: 768px)
 {
   .conversations-container
   {
+    display: flex;
     flex: none;
     width: 30%;
   }

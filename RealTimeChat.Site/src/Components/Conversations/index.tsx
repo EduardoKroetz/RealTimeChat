@@ -22,13 +22,16 @@ export default function Conversations()
 
   return (
     <div className="conversations-container">
-      {chatRooms.map((chatRoom) => 
-      (
-        <div key={chatRoom.id}>
-          <Conversation chatRoomName={chatRoom.name} chatRoomId={chatRoom.id} />
-        </div>
-      )
-      )}
+      <div className="conversations-chatrooms">
+        {chatRooms.map((chatRoom) => 
+          (
+            <div key={chatRoom.id}>
+              <Conversation chatRoomName={chatRoom.name} chatRoomId={chatRoom.id} />
+            </div>
+          )
+        )}
+      </div>
+    
     </div>
   )
 }

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import api from "../../api/axiosConfig";
 import IMessage from "../../Interfaces/Message";
 import IChatRoom from "../../Interfaces/ChatRoom";
 import "./style.css"
+import { ScreenWidthContext } from "../../Contexts/ScreenWidthContext";
 
 async function GetMessagesFromChatRoom(pageNumber: number, pageSize: number, chatRoomId: string) : Promise<IMessage[]>
 {
@@ -19,6 +20,7 @@ export default function ChatRoom()
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
   const [messages, setMessages] = useState<IMessage[]>([])
   const [page, setPage] = useState<number>(1);
+  const screenWidth = useContext(ScreenWidthContext);
 
   useEffect(() => 
   {
@@ -34,17 +36,27 @@ export default function ChatRoom()
     }
 
     getAsync();
-  }, [])
+  }, [id])
 
   return (
     <div className="chatroom-container">
-      <h1>{chatRoom?.name}</h1>
+      <div className="chatroom-info">
+        {screenWidth < 768 && (
+          <Link to={"/"} className="back-link">
+            <img src="/arrow-left.png" alt="Voltar" />
+          </Link>
+        )}
+        <h1>{chatRoom?.name}</h1>
+      </div>
+      <div className="chatroom-messages">
       {messages.map((msg) => 
         (
           <div>
             {msg.content}
           </div>
         ))}
+      </div>
+
     </div>
   )
 }
