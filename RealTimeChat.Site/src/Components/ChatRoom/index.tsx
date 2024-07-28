@@ -19,7 +19,6 @@ export default function ChatRoom()
 
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
   const [messages, setMessages] = useState<IMessage[]>([])
-  const [page, setPage] = useState<number>(1);
   const screenWidth = useContext(ScreenWidthContext);
 
   useEffect(() => 
