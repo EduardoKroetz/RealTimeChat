@@ -18,6 +18,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddEventSourceLogger();
+
 builder.Services.AddMediatR(options => options.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly));
 
 LoadConfiguration(builder.Configuration);
@@ -31,7 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+app.UseCors("Allow5173");
 
 app.UseHttpsRedirection();
 
@@ -58,12 +62,13 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddCors(options =>
     {
-        options.AddPolicy("AllowAll",
+        options.AddPolicy("Allow5173",
             builder =>
             {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                builder.WithOrigins("http://localhost:5173")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
             });
     });
 
@@ -75,6 +80,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddExceptionHandler<GlobalExceptionHandler>();
     services.AddProblemDetails();
 
+    services.AddLogging();
 
     //Injetando dependências
     services.AddScoped<IAuthService, AuthService>();

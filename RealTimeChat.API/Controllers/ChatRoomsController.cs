@@ -16,10 +16,12 @@ namespace RealTimeChat.API.Controllers;
 public class ChatRoomsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<ChatRoomsController> _logger;
 
-    public ChatRoomsController(IMediator mediator)
+    public ChatRoomsController(IMediator mediator, ILogger<ChatRoomsController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpGet("{chatRoomId:guid}")]
@@ -27,6 +29,7 @@ public class ChatRoomsController : ControllerBase
     {
         var query = new GetChatRoomQuery { ChatRoomId = chatRoomId };
         var result = await _mediator.Send(query);
+        _logger.LogInformation($"Get Chat room {chatRoomId} successfully!");
         return Ok(result);
     }
 

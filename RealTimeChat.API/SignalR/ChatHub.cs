@@ -9,11 +9,24 @@ public class ChatHub : Hub
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IRoomParticipantRepository _roomParticipantRepository;
+    private readonly ILogger<ChatHub> _logger;
 
-    public ChatHub(IMessageRepository messageRepository, IRoomParticipantRepository roomParticipantRepository)
+    public ChatHub(IMessageRepository messageRepository, IRoomParticipantRepository roomParticipantRepository, ILogger<ChatHub> logger)
     {
         _messageRepository = messageRepository;
         _roomParticipantRepository = roomParticipantRepository;
+        _logger = logger;
+    }
+    public override async Task OnConnectedAsync()
+    {
+        _logger.LogInformation("Client connected: " + Context.ConnectionId);
+        await base.OnConnectedAsync();
+    }
+
+    public async Task JoinGroupAsync(Guid chatRoomId)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId.ToString());
+        _logger.LogInformation($"Client {Context.ConnectionId} joined group {chatRoomId}");
     }
 
     public async Task SendMessageAsync(Guid chatRoomId, Guid userId,  string message)
@@ -24,12 +37,13 @@ public class ChatHub : Hub
             SenderId = userId,
             Content = message,
             Id = Guid.NewGuid(),
-            Timestamp = DateTime.UtcNow,
+            Timestamp = DateTime.Now,
         };
 
         await _messageRepository.AddAsync(chatMessage);
 
-        await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", userId, message);
+        await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", chatMessage);
+        _logger.LogInformation("Message sent successfully!");
     }
 
     public async Task DeleteMessageAsync(Guid messageId)
@@ -57,6 +71,6 @@ public class ChatHub : Hub
 
         await _messageRepository.UpdateAsync(message);
 
-        await Clients.Group(message.ChatRoomId.ToString()).SendAsync("UpdateMessage", messageId, newMessage);
+        await Clients.Group(message.ChatRoomId.ToString()).SendAsync("UpdateMessage", message);
     }
 }
