@@ -15,7 +15,7 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
   const SendMessage = async () => {
     if (newMessage.trim() === '')
       return;
-    await hubConnection.invoke("SendMessageAsync", chatRoomId, "user-id", newMessage);
+    await hubConnection.invoke("SendMessageAsync", chatRoomId, "e0c60f68-bf1a-4236-8161-956a190306bb", newMessage);
     setNewMessage("");
   }
 

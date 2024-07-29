@@ -53,7 +53,10 @@ export default function ChatRoom()
           await hubConnection.start();
           console.log("Connected to SignalR hub");
 
+          hubConnection.invoke("JoinGroupAsync", id);
+
           hubConnection.on("ReceiveMessage", (message: IMessage) => {
+            console.log("Message received!")
             setMessages((prevMessages) => [...prevMessages, message]);
           });
 
@@ -63,9 +66,7 @@ export default function ChatRoom()
             );
           });
 
-          hubConnection.on(
-            "UpdateMessage",
-            (messageId: string, newMessage: string) => {
+          hubConnection.on("UpdateMessage", (messageId: string, newMessage: string) => {
               setMessages((prevMessages) =>
                 prevMessages.map((msg) =>
                   msg.id === messageId ? { ...msg, content: newMessage } : msg
@@ -80,10 +81,6 @@ export default function ChatRoom()
     };
     
     connect();
-
-    return () => {
-      hubConnection.stop();
-  };
   }, [])
 
   if (chatRoom == undefined)
