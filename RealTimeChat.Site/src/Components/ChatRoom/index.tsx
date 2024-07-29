@@ -3,60 +3,78 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../api/axiosConfig";
 import IMessage from "../../Interfaces/IMessage";
 import IChatRoom from "../../Interfaces/IChatRoom";
-import "./style.css"
+import "./style.css";
 import { ScreenWidthContext } from "../../Contexts/ScreenWidthContext";
 import Message from "../Message";
 import hubConnection from "../../SignalR/hubConnection";
 import SendMessage from "../SendMessage";
 import { HubConnectionState } from "@microsoft/signalr";
 
-export default function ChatRoom()
+interface chatRoomProps
 {
+  isConnected: boolean
+}
+
+export default function ChatRoom({isConnected}: chatRoomProps) {
   const { id } = useParams();
-
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
-  const [messages, setMessages] = useState<IMessage[]>([])
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const screenWidth = useContext(ScreenWidthContext);
+  const [currentGroupId, setCurrentGroupId] = useState<string | null>(null);
 
-  //Get messages from chat room with pagination
-  const GetMessagesFromChatRoom = async (pageNumber: number, pageSize: number, chatRoomId: string) : Promise<IMessage[]> =>
-    {
-      var response = await api.get(`/messages/chatrooms/${chatRoomId}?pageSize=${pageSize}&pageNumber=${pageNumber}`)
-      return response.data.data;
+  // Get messages from chat room with pagination
+  const GetMessagesFromChatRoom = async (pageNumber: number, pageSize: number, chatRoomId: string): Promise<IMessage[]> => {
+    const response = await api.get(`/messages/chatrooms/${chatRoomId}?pageSize=${pageSize}&pageNumber=${pageNumber}`);
+    return response.data.data;
+  };
+
+  // Method for join hub group
+  const JoinGroup = async (chatRoomId: string) => {
+    if (hubConnection.state === HubConnectionState.Connected && currentGroupId !== chatRoomId) {
+      if (currentGroupId) {
+        await hubConnection.invoke("LeaveGroupAsync", currentGroupId);
+      }
+      await hubConnection.invoke("JoinGroupAsync", chatRoomId);
+      setCurrentGroupId(chatRoomId);
     }
+  };
 
-  //Call api to get data
-  useEffect(() => 
-  {
+  // Method for leave hub group
+  const LeaveGroup = async () => {
+    if (hubConnection.state === HubConnectionState.Connected && currentGroupId) {
+      await hubConnection.invoke("LeaveGroupAsync", currentGroupId);
+      setCurrentGroupId(null);
+    }
+  };
 
+  // Call API to get data
+  useEffect(() => {
     const getAsync = async () => {
-      //Get chat room
+      // Get chat room
       const response = await api.get(`/chatrooms/${id}`);
       setChatRoom(response.data.data);
 
-      //Get first 20 messages of chat room
-      var initialMessages = await GetMessagesFromChatRoom(1, 20, id!);
+      // Get first 20 messages of chat room
+      const initialMessages = await GetMessagesFromChatRoom(1, 20, id!);
       setMessages(initialMessages);
-    }
+
+      JoinGroup(id!);
+    };
 
     getAsync();
 
-  }, [id])
+    // Cleanup function to leave group
+    return () => {
+      LeaveGroup();
+    };
+  }, [id]);
 
-
-  //Connect and to subscribe chathub events with signalR
-  useEffect(() =>
-  {
-    const connect = async () => {
-      if (hubConnection.state === HubConnectionState.Disconnected) {
+  // Connect and subscribe to chat hub events with SignalR
+  useEffect(() => {
+    const subscribeEvents = async () => {
+      if (hubConnection.state === HubConnectionState.Connected) {
         try {
-          await hubConnection.start();
-          console.log("Connected to SignalR hub");
-
-          hubConnection.invoke("JoinGroupAsync", id);
-
           hubConnection.on("ReceiveMessage", (message: IMessage) => {
-            console.log("Message received!")
             setMessages((prevMessages) => [...prevMessages, message]);
           });
 
@@ -67,27 +85,34 @@ export default function ChatRoom()
           });
 
           hubConnection.on("UpdateMessage", (messageId: string, newMessage: string) => {
-              setMessages((prevMessages) =>
-                prevMessages.map((msg) =>
-                  msg.id === messageId ? { ...msg, content: newMessage } : msg
-                )
-              );
-            }
-          );
+            setMessages((prevMessages) =>
+              prevMessages.map((msg) =>
+                msg.id === messageId ? { ...msg, content: newMessage } : msg
+              )
+            );
+          });
+
+          JoinGroup(id!);
         } catch (err) {
           console.error("Error connecting to SignalR hub", err);
         }
       }
     };
-    
-    connect();
-  }, [])
 
-  if (chatRoom == undefined)
-  {
-    return (
-      <h1>Erro ao carregar a sala de bate papo</h1>
-    )
+    subscribeEvents();
+
+    return () => {
+      LeaveGroup();
+    };
+  }, [isConnected]);
+
+
+
+
+  //Component
+
+  if (!chatRoom) {
+    return <h1>Erro ao carregar a sala de bate papo</h1>;
   }
 
   return (
@@ -101,18 +126,17 @@ export default function ChatRoom()
         <h1>{chatRoom?.name}</h1>
       </div>
       <div className="chatroom-messages">
-      {messages.map((msg) => 
-        (
+        {messages.map((msg) => (
           <Message 
             key={msg.id}
             chatRoomId={msg.chatRoomId} 
             content={msg.content} 
             id={msg.id} 
             senderId={msg.senderId} 
-            timestamp={msg.timestamp}/>
+            timestamp={msg.timestamp} />
         ))}
       </div>
-        <SendMessage chatRoomId={chatRoom.id} />
+      <SendMessage chatRoomId={chatRoom.id} />
     </div>
-  )
+  );
 }

@@ -3,7 +3,7 @@ import ChatRoom from "../../Components/ChatRoom";
 import { useContext } from "react";
 import { ScreenWidthContext } from "../../Contexts/ScreenWidthContext";
 
-export default function ChatRoomPage()
+export default function ChatRoomPage({ isConnected }: any)
 {
   const screenWidth = useContext(ScreenWidthContext);
 
@@ -13,7 +13,7 @@ export default function ChatRoomPage()
         {screenWidth >= 768 && (
           <Conversations />
         )}
-        <ChatRoom />
+        <ChatRoom isConnected={isConnected}/>
       </div>
     </>
   )
