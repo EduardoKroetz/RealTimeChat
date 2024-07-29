@@ -24,6 +24,12 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
     inputRef.current.focus();
   }, [inputRef])
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => 
+  {
+    if (event.key === "Enter")
+      SendMessage();
+  }
+
 
   return (
     <div className="send-message-container">
@@ -33,9 +39,12 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
         placeholder="Mensagem"
         className="send-message-input"
         value={newMessage} 
+        onKeyDown={(e) => handleKeyDown(e)}
         onChange={(e) => setNewMessage(e.target.value)}/>
       
-      <button className="send-message-button" onClick={SendMessage}>Enviar</button>
+      <button className="send-message-button" onClick={SendMessage}>
+        <img className="send-message-icon" src="/send-message-icon.png" alt="Enviar" />
+      </button>
     </div>
   )
 }

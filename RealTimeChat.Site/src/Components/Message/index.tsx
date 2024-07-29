@@ -4,7 +4,7 @@ import "./style.css"
 import IUser from "../../Interfaces/IUser";
 import api from "../../api/axiosConfig";
 
-export default function Message({ chatRoomId, content, id ,senderId, timestamp }: IMessage)
+export default function Message({ content, id ,senderId, timestamp }: IMessage)
 {
   const [user,setUser] = useState<IUser>();
   timestamp = new Date(timestamp);

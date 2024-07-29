@@ -29,7 +29,7 @@
 .send-message-button
 {
   padding: 15px;
-  background-color: green;
+  background-color: rgba(0, 194, 0, 0.823);
   border: 0;
   border-radius: 5px;
 }
