@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.DeleteChatRoom;
@@ -8,11 +9,13 @@ using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.Queries.GetAllChatRooms;
 using RealTimeChat.Application.Queries.GetChatRoom;
 using RealTimeChat.Application.Queries.GetUserChatRooms;
+using System.Security.Claims;
 
 namespace RealTimeChat.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ChatRoomsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -64,25 +67,28 @@ public class ChatRoomsController : ControllerBase
     }
 
     [HttpPost("{chatRoomId:guid}/join/{userId:guid}")]
-    public async Task<IActionResult> JoinAsync([FromRoute] Guid chatRoomId, [FromRoute] Guid userId)
+    public async Task<IActionResult> JoinAsync([FromRoute] Guid chatRoomId)
     {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var command = new JoinChatRoomCommand { ChatRoomId = chatRoomId, UserId = userId };
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
 
-    [HttpDelete("{chatRoomId:guid}/leave/{userId:guid}")]
-    public async Task<IActionResult> LeaveAsync([FromRoute] Guid chatRoomId, [FromRoute] Guid userId)
+    [HttpDelete("{chatRoomId:guid}/leave")]
+    public async Task<IActionResult> LeaveAsync([FromRoute] Guid chatRoomId)
     {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var command = new LeaveChatRoomCommand { ChatRoomId = chatRoomId, UserId = userId };
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
-    [HttpGet("users/{userId:guid}")]
-    public async Task<IActionResult> GetUserChatRooms([FromRoute] Guid userId)
+    [HttpGet("users")] 
+    public async Task<IActionResult> GetUserChatRooms()
     {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var query = new GetUserChatRoomsQuery { UserId = userId };
         var result = await _mediator.Send(query);
         return Ok(result);

@@ -18,10 +18,18 @@ public class GetChatRoomMessagesQueryHandler : IRequestHandler<GetChatRoomMessag
     public async Task<PagedResult> Handle(GetChatRoomMessagesQuery request, CancellationToken cancellationToken)
     {
         var skip = ( request.PageNumber - 1 ) * request.PageSize;
-        var messages = await _chatRoomRepository.GetMessagesInRoomAsync( skip, request.PageSize  ,request.ChatRoomId);
+        var messages = await _chatRoomRepository.GetMessagesInRoomAsync( skip, request.PageSize ,request.ChatRoomId);
 
         var result = messages.Select(x =>
-            new GetMessageViewModel(x.Id, x.Content, x.Timestamp, x.SenderId, x.ChatRoomId)
+            new GetMessageViewModel(
+                x.Id, 
+                x.Content, 
+                x.Timestamp, 
+                x.SenderId, 
+                x.ChatRoomId, 
+                new GetMessageUser(
+                    x.Sender.Id, 
+                    x.Sender.Username))
         ).ToList();
 
         return PagedResult.SuccessResult(result, request.PageNumber, request.PageSize, result.Count, "Success!");

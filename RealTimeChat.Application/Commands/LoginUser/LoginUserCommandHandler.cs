@@ -30,7 +30,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result>
             throw new ArgumentException("Email or password are invalid");
         }
 
-        var token = _authService.GenerateJwtToken(request.Email);
+        var token = _authService.GenerateJwtToken(user.Id ,request.Email);
 
         return Result.SuccessResult(new { token }, "Login successfully");
     }

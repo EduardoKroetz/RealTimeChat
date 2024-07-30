@@ -21,12 +21,13 @@ public class AuthService : IAuthService
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public string GenerateJwtToken(string email)
+    public string GenerateJwtToken(Guid userId, string email)
     {
         var key = _configuration["JwtKey"]!;
 
         var claims = new List<Claim>
         {
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Role, "user")
         };

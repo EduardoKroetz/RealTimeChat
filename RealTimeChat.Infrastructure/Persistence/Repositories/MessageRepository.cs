@@ -34,7 +34,7 @@ public class MessageRepository : IMessageRepository
 
     public async Task<Message?> GetByIdAsync(Guid messageId)
     {
-        return await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == messageId);
+        return await _dbContext.Messages.Include(x => x.Sender).FirstOrDefaultAsync(x => x.Id == messageId);
     }
 
     public async Task<IEnumerable<Message>> GetMessagesByRoomIdAsync(Guid chatRoomId)

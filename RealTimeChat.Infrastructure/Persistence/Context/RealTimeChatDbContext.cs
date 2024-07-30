@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RealTimeChat.Core.Entities;
 
 namespace RealTimeChat.Infrastructure.Persistence.Context;
@@ -10,7 +11,8 @@ public class RealTimeChatDbContext : DbContext
 
     public RealTimeChatDbContext(DbContextOptions<RealTimeChatDbContext> options) : base(options)
     {
-        
+        ChangeTracker.LazyLoadingEnabled = false;
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     public virtual DbSet<ChatRoom> ChatRooms { get; set; }

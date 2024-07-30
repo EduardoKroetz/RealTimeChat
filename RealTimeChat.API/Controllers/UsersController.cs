@@ -1,12 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Queries.GetUser;
-using RealTimeChat.Application.Queries.GetUsers;
+using System.Security.Claims;
 
 namespace RealTimeChat.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -17,17 +19,10 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromQuery] int pageSize, [FromQuery] int pageNumber)
+    public async Task<IActionResult> GetCurrentAsync()
     {
-        var query = new GetUsersQuery { PageNumber = pageNumber, PageSize = pageSize};
-        var result = await _mediator.Send(query);
-        return Ok(result);
-    }
-
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id)
-    {
-        var query = new GetUserQuery { UserId = id };
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetUserQuery { UserId = userId };
         var result = await _mediator.Send(query);
         return Ok(result);
     }

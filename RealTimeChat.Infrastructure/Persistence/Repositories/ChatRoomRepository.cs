@@ -43,6 +43,7 @@ public class ChatRoomRepository : IChatRoomRepository
     public async Task<IEnumerable<Message>> GetMessagesInRoomAsync(int skip, int take, Guid chatRoomId)
     {
         return await _dbContext.Messages
+            .Include(x => x.Sender)
             .Where(m => m.ChatRoomId == chatRoomId)
             .OrderBy(m => m.Timestamp)
             .Skip(skip)

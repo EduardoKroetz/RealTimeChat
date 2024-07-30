@@ -24,7 +24,7 @@ public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, Result>
             throw new NotFoundException("Message not found");
         }
 
-        var data = new GetMessageViewModel(message.Id, message.Content, message.Timestamp, message.SenderId, message.ChatRoomId);
+        var data = new GetMessageViewModel(message.Id, message.Content, message.Timestamp, message.SenderId, message.ChatRoomId, new GetMessageUser(message.Sender.Id,message.Sender.Username));
 
         return Result.SuccessResult(data, "Success!");   
     }
