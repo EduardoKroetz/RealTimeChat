@@ -5,7 +5,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 
 interface ISendMessageProps
 {
-  chatRoomId: string
+  chatRoomId: string | undefined
 }
 
 export default function SendMessage({ chatRoomId }: ISendMessageProps)

@@ -12,7 +12,7 @@ export default function HomePage()
   return (
     <>
       <Header />
-      <div className="homepage-main-content">
+      <div className="main-content">
         <Conversations />
         {screenWidth >= 768 && (
           <DefaultChatRoom/>

@@ -1,7 +1,6 @@
 .conversations-container
 {
   flex: 1;
-  background-color: rgba(0, 0, 0, 0.729);
   padding: 1rem;
   display: flex;
   flex-direction: column;

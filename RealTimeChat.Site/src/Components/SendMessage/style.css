@@ -20,6 +20,11 @@
   color: rgb(196, 195, 195);
 }
 
+.send-message-input:hover
+{
+  cursor: pointer;
+}
+
 .send-message-input:focus
 {
   border: 0px solid black;
@@ -28,10 +33,11 @@
 
 .send-message-button
 {
-  padding: 15px;
+  padding: 5px;
   background-color: rgba(0, 194, 0, 0.823);
   border: 0;
   border-radius: 5px;
+  width: 50px;
 }
 
 .send-message-button:hover
@@ -39,12 +45,7 @@
   cursor: pointer;
 }
 
-
-
-@media (min-width: 768px)
+.send-message-icon
 {
-  .send-message-input
-  {
-    font-size: large
-  }
+  width: 30px;
 }

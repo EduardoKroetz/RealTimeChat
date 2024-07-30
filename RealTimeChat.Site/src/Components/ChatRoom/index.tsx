@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import IMessage from "../../Interfaces/IMessage";
 import IChatRoom from "../../Interfaces/IChatRoom";
@@ -21,6 +21,8 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const screenWidth = useContext(ScreenWidthContext);
   const [currentGroupId, setCurrentGroupId] = useState<string | null>(null);
+  const [chatRoomLoaded, setChatRoomLoaded] = useState<boolean>(false);
+  const messagesRef = useRef<any>(null); 
 
   // Get messages from chat room with pagination
   const GetMessagesFromChatRoom = async (pageNumber: number, pageSize: number, chatRoomId: string): Promise<IMessage[]> => {
@@ -52,7 +54,11 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
     const getAsync = async () => {
       // Get chat room
       const response = await api.get(`/chatrooms/${id}`);
-      setChatRoom(response.data.data);
+      if (response.status === 200)
+      {
+        setChatRoom(response.data.data);
+      }
+      setChatRoomLoaded(true)
 
       // Get first 20 messages of chat room
       const initialMessages = await GetMessagesFromChatRoom(1, 20, id!);
@@ -106,11 +112,18 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
     };
   }, [isConnected]);
 
+  useEffect(() => {
+    if (messagesRef.current)
+    {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  }, [messages])
+
 
   //Component
 
-  if (!chatRoom) {
-    return <h1>Erro ao carregar a sala de bate papo</h1>;
+  if (!chatRoom && chatRoomLoaded) {
+    return <h1 className="error-loading-chat-room">Erro ao carregar a sala de bate papo</h1>;
   }
 
   return (
@@ -121,9 +134,9 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
             <img src="/arrow-left.png" alt="Voltar" />
           </Link>
         )}
-        <h1>{chatRoom?.name}</h1>
+        <h2>{chatRoom?.name}</h2>
       </div>
-      <div className="chatroom-messages">
+      <div className="chatroom-messages" ref={messagesRef}>
         {messages.map((msg) => (
           <Message 
             key={msg.id}
@@ -135,7 +148,7 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
             timestamp={msg.timestamp} />
         ))}
       </div>
-      <SendMessage chatRoomId={chatRoom.id} />
+      <SendMessage chatRoomId={chatRoom?.id} />
     </div>
   );
 }
