@@ -5,6 +5,11 @@
   font-family: sans-serif;
 }
 
+p, a, button, input, label
+{
+  font-size: large;
+}
+
 a
 {
   text-decoration: none;

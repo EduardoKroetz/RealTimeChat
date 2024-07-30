@@ -1,16 +1,19 @@
 import './App.css'
 
-import { Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import ChatRoomPage from './pages/ChatRoom/index.tsx';
 import HomePage from './pages/Home/index.tsx';
-import Header from './Components/Header/index.tsx';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import hubConnection from './SignalR/hubConnection.ts';
 import { HubConnectionState } from '@microsoft/signalr';
+import LoginPage from './pages/Login/index.tsx';
+import { Route, Routes } from 'react-router-dom';
+import { AuthContext } from './Contexts/AuthContext.tsx';
 
 function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const { jwtToken } = useContext(AuthContext);
 
+  //Connect to chat hub
   useEffect(() => {
     const connect = async () => {
       if (hubConnection.state === HubConnectionState.Disconnected) {
@@ -31,16 +34,17 @@ function App() {
     };
   }, []);
 
+  if (!jwtToken)
+    return <></>
+
   return (
-    <Router >
-      <div className="app">
-        <Header/>
-        <Routes>
-          <Route path="/" Component={HomePage}/>
-          <Route path="/chatrooms/:id" Component={() => <ChatRoomPage isConnected={isConnected}/>}/>
-        </Routes>
-      </div>
-    </Router>
+    <div className="app">
+      <Routes>
+        <Route path="/" Component={HomePage}/>
+        <Route path="/login" Component={LoginPage} />
+        <Route path="/chatrooms/:id" Component={() => <ChatRoomPage isConnected={isConnected}/>}/>
+      </Routes>
+    </div>
   )
 }
 
