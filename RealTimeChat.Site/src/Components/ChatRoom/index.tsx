@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import api from "../../api/axiosConfig";
 import IMessage from "../../Interfaces/IMessage";
 import IChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css";
@@ -9,6 +8,7 @@ import Message from "../Message";
 import hubConnection from "../../SignalR/hubConnection";
 import SendMessage from "../SendMessage";
 import { HubConnectionState } from "@microsoft/signalr";
+import api from "../../api/axiosConfig";
 
 interface chatRoomProps
 {
@@ -107,8 +107,6 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
   }, [isConnected]);
 
 
-
-
   //Component
 
   if (!chatRoom) {
@@ -129,6 +127,7 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
         {messages.map((msg) => (
           <Message 
             key={msg.id}
+            sender={msg.sender}
             chatRoomId={msg.chatRoomId} 
             content={msg.content} 
             id={msg.id} 

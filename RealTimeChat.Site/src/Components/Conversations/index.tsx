@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react"
-import api from "../../api/axiosConfig"
 import ChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css"
 import Conversation from "../Conversation";
+import api from "../../api/axiosConfig";
 
 export default function Conversations()
 {
@@ -13,7 +13,7 @@ export default function Conversations()
   {
     const getUserChatRooms = async () =>
     {
-      var response = await api.get("/chatrooms/users/e0c60f68-bf1a-4236-8161-956a190306bb");
+      var response = await api.get("/chatrooms/users");
       setChatRooms(response.data.data);
     }
 

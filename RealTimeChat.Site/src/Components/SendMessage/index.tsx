@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import hubConnection from "../../SignalR/hubConnection";
 import "./style.css"
+import { AuthContext } from "../../Contexts/AuthContext";
 
 interface ISendMessageProps
 {
@@ -11,11 +12,12 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
 {
   const [newMessage, setNewMessage] = useState<string>("");
   const inputRef = useRef<any>();
+  const { user } = useContext(AuthContext);
 
   const SendMessage = async () => {
     if (newMessage.trim() === '')
       return;
-    await hubConnection.invoke("SendMessageAsync", chatRoomId, "e0c60f68-bf1a-4236-8161-956a190306bb", newMessage);
+    await hubConnection.invoke("SendMessageAsync", chatRoomId, user?.id, newMessage);
     setNewMessage("");
   }
 

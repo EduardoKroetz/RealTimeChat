@@ -6,4 +6,5 @@ export default interface IMessage
   timestamp: Date,
   senderId: string,
   chatRoomId: string
+  sender: { id: string, username: string }
 }
