@@ -9,6 +9,9 @@ import hubConnection from "../../SignalR/hubConnection";
 import SendMessage from "../SendMessage";
 import { HubConnectionState } from "@microsoft/signalr";
 import api from "../../api/axiosConfig";
+import { AxiosResponse } from "axios";
+import IResponse from "../../Interfaces/IResponse";
+import { format,  isToday, isYesterday } from "date-fns";
 
 interface chatRoomProps
 {
@@ -22,12 +25,41 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
   const screenWidth = useContext(ScreenWidthContext);
   const [currentGroupId, setCurrentGroupId] = useState<string | null>(null);
   const [chatRoomLoaded, setChatRoomLoaded] = useState<boolean>(false);
-  const messagesRef = useRef<any>(null); 
+  const [page, setPage] = useState<number>(1);
+  const [isLimitMessages, setIsLimitMessages] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [firstElement, setFirstElement] = useState<HTMLElement>(null!);
+  const messagesRef = useRef<HTMLDivElement>(null); 
 
   // Get messages from chat room with pagination
-  const GetMessagesFromChatRoom = async (pageNumber: number, pageSize: number, chatRoomId: string): Promise<IMessage[]> => {
-    const response = await api.get(`/messages/chatrooms/${chatRoomId}?pageSize=${pageSize}&pageNumber=${pageNumber}`);
-    return response.data.data;
+  const GetMessagesFromChatRoom = async () => {
+    if (!isLimitMessages)
+    {
+      if (messages.length > 0)
+      {
+        const firstElementId = messages[0].id;
+        console.log(firstElementId)
+        const firstElement = document.getElementById(firstElementId)
+        if (firstElement)
+        {
+          setFirstElement(firstElement);
+        }
+      }
+      const response: AxiosResponse<IResponse<Array<IMessage>>> = await api.get(`/messages/chatrooms/${id}?pageSize=${20}&pageNumber=${page}`);
+      if (response.data.data.length === 0)
+      {
+        setIsLimitMessages(true);
+        const container = messagesRef.current;
+        if (container)
+          container.scrollTop = 0;
+        return;
+      }
+      setPage((prevPage) => prevPage + 1);
+      setMessages((prevMessages) => [...response.data.data.reverse(),...prevMessages]);
+
+      //Get first element
+
+    }
   };
 
   // Method for join hub group
@@ -49,6 +81,26 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
     }
   };
 
+  useEffect(() => {
+    console.log("Loading messages in useEffect Message:" + loadingMessages)
+    if (messagesRef.current && !loadingMessages) 
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    if (loadingMessages)
+    {
+      const container = messagesRef.current;
+      if (container)
+      {
+        console.log(firstElement)
+        container.scrollTo({
+          top: firstElement.offsetTop - 120,
+          behavior: 'smooth'
+        })
+      }
+      setLoadingMessages(false);
+    }
+
+  }, [messages])
+
   // Call API to get data
   useEffect(() => {
     const getAsync = async () => {
@@ -61,8 +113,7 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
       setChatRoomLoaded(true)
 
       // Get first 20 messages of chat room
-      const initialMessages = await GetMessagesFromChatRoom(1, 20, id!);
-      setMessages(initialMessages);
+      await GetMessagesFromChatRoom();
 
       JoinGroup(id!);
     };
@@ -106,19 +157,41 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
     };
 
     subscribeEvents();
-
+      
     return () => {
       LeaveGroup();
     };
   }, [isConnected]);
 
-  useEffect(() => {
-    if (messagesRef.current)
-    {
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+  // Helper function to render date dividers
+  const renderDateDivider = (timestamp: Date) => {
+    if (isToday(timestamp)) {
+      return <div className="line-with-message">Hoje</div>;
+    } else if (isYesterday(timestamp)) {
+      return <div className="line-with-message">Ontem</div>;
+    } else {
+      return <div className="line-with-message">{format(new Date(timestamp), "dd/MM/yyyy")}</div>;
     }
-  }, [messages])
+  };
 
+  // Função para verificar a rolagem
+  const handleScroll = async () => {
+    if (messagesRef.current) {
+      const { scrollTop } = messagesRef.current;
+      if (scrollTop === 0 && !isLimitMessages) {
+        setLoadingMessages(true);
+        await GetMessagesFromChatRoom();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = messagesRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
 
   //Component
 
@@ -137,16 +210,21 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
         <h2>{chatRoom?.name}</h2>
       </div>
       <div className="chatroom-messages" ref={messagesRef}>
-        {messages.map((msg) => (
-          <Message 
-            key={msg.id}
-            sender={msg.sender}
-            chatRoomId={msg.chatRoomId} 
-            content={msg.content} 
-            id={msg.id} 
-            senderId={msg.senderId} 
-            timestamp={msg.timestamp} />
-        ))}
+        <>
+          {messages.map((msg, index) => (
+            <div key={msg.id}>
+              {(index === 0 || new Date(msg.timestamp).toDateString() !== new Date(messages[index - 1].timestamp).toDateString()) && 
+                renderDateDivider(msg.timestamp)}
+              <Message 
+              sender={msg.sender}
+              chatRoomId={msg.chatRoomId} 
+              content={msg.content} 
+              id={msg.id} 
+              senderId={msg.senderId} 
+              timestamp={msg.timestamp} />
+            </div>
+          ))}
+        </>
       </div>
       <SendMessage chatRoomId={chatRoom?.id} />
     </div>

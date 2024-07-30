@@ -40,7 +40,10 @@
   gap: 1.3rem;
   overflow-y: auto;
   flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: white rgba(0, 0, 0, 0.729);
 }
+
 
 @media (min-width: 768px)
 {
@@ -48,4 +51,31 @@
   {
     padding: 1rem;
   }
+}
+
+/* Line-with-message */
+.line-with-message {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.line-with-message::before,
+.line-with-message::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid white;
+}
+
+.line-with-message:not(:empty)::before {
+  margin-right: 0.25em;
+}
+
+.line-with-message:not(:empty)::after {
+  margin-left: 0.25em;
+}
+
+.line-with-message {
+  padding: 0 10px;
 }
