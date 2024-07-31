@@ -1,0 +1,42 @@
+.search-rooms-container
+{
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.search-rooms-input
+{
+  flex: 1;
+  border: 0;
+  padding: 10px;
+  outline: none;
+  flex: 1;
+  background-color: transparent;
+}
+
+.search-rooms-input::placeholder
+{
+  color: gray;
+}
+
+
+.search-rooms-input:focus
+{
+  box-shadow: 0px 0px 3px white;
+}
+
+@media (min-width: 425px)
+{
+  .search-rooms-input
+  {
+    background-color: white;
+    border-radius: 4px;
+    color: rgb(93, 93, 93) ;
+  }
+
+  .search-rooms-input
+  {
+    max-width: 400px;
+  }
+}

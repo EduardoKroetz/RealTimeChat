@@ -4,9 +4,23 @@
   width: 100%;
   max-height: 50px;
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
-  padding: 1rem 0;
+  padding: .4rem 0rem;
+  justify-content: space-between;
+}
+
+.header-container h1
+{
+  margin-left: 10px;
+}
+
+.header-content
+{
+  display: flex;
+  gap: 1rem;  
+  margin-right: 10px;
+  width: 60%;
+  justify-content: end;
 }
 
 .header-title
@@ -14,3 +28,18 @@
   font-size: large;
 }
 
+.user-icon
+{
+  font-size: larger;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.user-icon:hover
+{
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  transition: 200ms;
+}
