@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom"
 import "./style.css"
-import { useContext } from "react"
+import { useContext, useRef, useState } from "react"
 import { ScreenWidthContext } from "../../Contexts/ScreenWidthContext"
 import SearchRooms from "../SearchRooms";
+import UserInfo from "../UserDropDown";
 
 export default function Header()
 {
+  const [userInfoIsOpen, setUserInfoIsOpen] = useState(false);
   const screenWidth = useContext(ScreenWidthContext);
+  const userIconRef = useRef<HTMLElement>(null);
 
   return (
     <div className="header-container">
@@ -18,9 +21,10 @@ export default function Header()
           <SearchRooms />
         }
         <div className="header-user-info">
-          <i title="Você" className="fas fa-user user-icon"></i>
+          <i ref={userIconRef} title="Você" className="fas fa-user user-icon" onClick={() => setUserInfoIsOpen((prevValue) => !prevValue)}></i>
         </div>
       </div>
+      <UserInfo setUserInfoIsOpen={setUserInfoIsOpen} userIconRef={userIconRef} userInfoIsOpen={userInfoIsOpen}/>
     </div>
   )
 }

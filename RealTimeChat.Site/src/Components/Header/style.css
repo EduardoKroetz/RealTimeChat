@@ -1,5 +1,6 @@
 .header-container
 {
+  position: relative;
   background-color: gray;
   width: 100%;
   max-height: 50px;
