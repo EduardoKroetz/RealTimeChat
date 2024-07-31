@@ -1,5 +1,5 @@
 
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import "./style.css"
 import { useContext, useState } from "react"
 import { AuthContext } from "../../Contexts/AuthContext";
@@ -11,7 +11,6 @@ export default function LoginPage()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const authContext = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleSubmit = async () =>
   {
@@ -21,7 +20,7 @@ export default function LoginPage()
       var token = response.data.data.token;
       authContext.setJwtToken(token)
       Cookies.set("JwtToken", token, { secure: true, sameSite: "Strict"})
-      navigate("/")
+      window.location.pathname = "/"
     }
   }  
 

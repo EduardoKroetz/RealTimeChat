@@ -22,6 +22,11 @@ const AuthContextProvider = ({children}: any) =>
   //Get token from cookie
   useEffect(() =>
   {
+    const getUser = async () =>{
+      var response = await api.get(`/users`, { headers: { Authorization: "Bearer "+ token } });
+      setUser(response.data.data);
+    }
+
     const token = Cookies.get("JwtToken");
     if (token)
     {
@@ -33,16 +38,15 @@ const AuthContextProvider = ({children}: any) =>
         },
         error => Promise.reject(error)
       );
+
+      getUser();
     }
     else
       navigate("/login")
     
-    const getUser = async () =>{
-      var response = await api.get(`/users`, { headers: { Authorization: "Bearer "+ token } });
-      setUser(response.data.data);
-    }
 
-    getUser();
+
+   
   }, [])
 
   return (

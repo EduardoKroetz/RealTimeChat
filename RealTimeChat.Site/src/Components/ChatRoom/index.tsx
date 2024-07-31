@@ -137,11 +137,14 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
           });
 
           hubConnection.on("UpdateMessage", (message: IMessage) => {
-            setMessages((prevMessages) =>
-              prevMessages.map((msg) =>
-                msg.id === message.id ? { ...msg, message } : msg
-              )
-            );
+            setMessages((prevMessages) => {
+              const messagesCopy = [...prevMessages];
+              const index = messagesCopy.findIndex(x => x.id === message.id);
+              if (index !== -1) {
+                messagesCopy[index] = message;
+              }
+              return messagesCopy;
+            });
           });
 
           JoinGroup(id!);
@@ -207,10 +210,13 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
       <div className="chatroom-messages" ref={messagesRef}>
         <>
           {messages.map((msg, index) => (
-            <div key={msg.id}>
+            <div key={`${msg.id}-${msg.content}`}>
+              {}
               {(index === 0 || new Date(msg.timestamp).toDateString() !== new Date(messages[index - 1].timestamp).toDateString()) && 
                 renderDateDivider(msg.timestamp)}
               <Message 
+              lastMessageRenderedSenderId={index > 0 ? messages[index - 1].senderId : null}
+              lastMessageRenderedTimestamp={index > 0 ? messages[index - 1].timestamp : null}
               sender={msg.sender}
               chatRoomId={msg.chatRoomId} 
               content={msg.content} 

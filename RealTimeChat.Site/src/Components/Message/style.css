@@ -5,6 +5,11 @@
   z-index: 1;
 }
 
+.message-container-flex-end
+{
+  justify-content: end;
+}
+
 .message-container p {
   font-size: small;
 }
@@ -14,7 +19,8 @@
   font-weight: 600;
 }
 
-.message
+
+.message, .my-message
 {
   background-color: gray;
   padding: .6rem;
@@ -47,6 +53,12 @@
   max-width: 44vw;
 }
 
+.message-content-container > .message-timestamp
+{
+  font-size: xx-small;
+}
+
+
 .user-info
 {
   display: flex;
@@ -59,10 +71,38 @@
   font-size: larger;
 }
 
+.user-message-group-container
+{
+  margin-left: 46px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.not-message-group-container
+{
+  margin-top: 15px;
+}
+
+.user-message-group
+{
+  border-radius: 10px;
+}
+
+.my-message
+{
+  border-radius: 10px 0px 10px 10px;
+}
+
 
 .message-container i:hover
 {
   cursor: pointer;
+}
+
+.user-message-actions
+{
+  display: flex;
+  flex: 1;
+  justify-content: end;
 }
 
 .message-action-drop-down

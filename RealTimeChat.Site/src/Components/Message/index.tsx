@@ -4,8 +4,15 @@ import "./style.css"
 import { AuthContext } from "../../Contexts/AuthContext";
 import hubConnection from "../../SignalR/hubConnection";
 import UpdateMessage from "./UpdateMessage";
+import { differenceInMinutes } from "date-fns";
 
-export default function Message({ content, id, sender, senderId, timestamp }: IMessage)
+interface IMessageProps extends IMessage
+{
+  lastMessageRenderedTimestamp: Date | null
+  lastMessageRenderedSenderId: string | null
+}
+
+export default function Message({ content, id, sender, senderId, timestamp, lastMessageRenderedSenderId, lastMessageRenderedTimestamp }: IMessageProps)
 {
   const [messageContent, setMessageContent] = useState(content);
   const [updateMessage, setUpdateMessage] = useState(false);
@@ -13,7 +20,9 @@ export default function Message({ content, id, sender, senderId, timestamp }: IM
   const [messageActionDropDown, setMessageActionDropDown] = useState(false);
   const [initialMessage] = useState(content);
   const messageRef = useRef<HTMLDivElement>(null)
-  
+  const renderUserMessageGroup = senderId === lastMessageRenderedSenderId && differenceInMinutes(new Date(timestamp), new Date(lastMessageRenderedTimestamp ?? "")) < 10;
+  const isMyMessage = senderId === user?.id;
+
   timestamp = new Date(timestamp);
   const minutes = timestamp.getMinutes();
   const hours = timestamp.getHours();
@@ -66,12 +75,23 @@ export default function Message({ content, id, sender, senderId, timestamp }: IM
 
 
   return (
-    <div className="message-container" id={id} key={id}>
-      <img className="user-img" src="/user-icon.png" alt="" />
-      <div className="message" ref={messageRef}>
+    <div
+      className={`message-container 
+        ${isMyMessage ? "message-container-flex-end" : ""}  
+        ${renderUserMessageGroup ? "user-message-group-container" : "not-message-group-container"}`}
+      id={id}
+      key={id}
+    >
+      {!renderUserMessageGroup && !isMyMessage && 
+      (
+        <img className="user-img" src="/user-icon.png" alt="" />
+      )}
+      <div className={`${isMyMessage ? "my-message" : "message"} ${renderUserMessageGroup ? "user-message-group" : ""}`} ref={messageRef}>
         <div className="user-info">
-          <p className="username">{sender.username}</p>
-          {user!.id === senderId && (
+          {!isMyMessage && (
+            <p className="username">{sender.username}</p>
+          )}
+          {isMyMessage && (
             <div className="user-message-actions">
               <i className={messageActionDropDown ? "fas fa-times-circle" : "fas fa-ellipsis-h"} onClick={handleDropDown}></i>
             </div>
@@ -85,7 +105,7 @@ export default function Message({ content, id, sender, senderId, timestamp }: IM
           (
             <p className="message-content">{messageContent}</p>
           )}
-          <p>{formatedTime}</p>
+          <p className="message-timestamp">{formatedTime}</p>
         </div>
         {messageActionDropDown &&
           (
