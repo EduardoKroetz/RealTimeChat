@@ -8,6 +8,7 @@ import { HubConnectionState } from '@microsoft/signalr';
 import LoginPage from './pages/Login/index.tsx';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from './Contexts/AuthContext.tsx';
+import RegisterPage from './pages/Register/index.tsx';
 
 function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -42,6 +43,7 @@ function App() {
       <Routes>
         <Route path="/" Component={HomePage}/>
         <Route path="/login" Component={LoginPage} />
+        <Route path="/register" Component={RegisterPage} />
         <Route path="/chatrooms/:id" Component={() => <ChatRoomPage isConnected={isConnected}/>}/>
       </Routes>
     </div>
