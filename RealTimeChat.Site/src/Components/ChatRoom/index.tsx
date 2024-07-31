@@ -38,7 +38,6 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
       if (messages.length > 0)
       {
         const firstElementId = messages[0].id;
-        console.log(firstElementId)
         const firstElement = document.getElementById(firstElementId)
         if (firstElement)
         {
@@ -56,8 +55,6 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
       }
       setPage((prevPage) => prevPage + 1);
       setMessages((prevMessages) => [...response.data.data.reverse(),...prevMessages]);
-
-      //Get first element
 
     }
   };
@@ -82,7 +79,6 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
   };
 
   useEffect(() => {
-    console.log("Loading messages in useEffect Message:" + loadingMessages)
     if (messagesRef.current && !loadingMessages) 
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     if (loadingMessages)
@@ -90,7 +86,6 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
       const container = messagesRef.current;
       if (container)
       {
-        console.log(firstElement)
         container.scrollTo({
           top: firstElement.offsetTop - 120,
           behavior: 'smooth'
@@ -141,10 +136,10 @@ export default function ChatRoom({isConnected}: chatRoomProps) {
             );
           });
 
-          hubConnection.on("UpdateMessage", (messageId: string, newMessage: string) => {
+          hubConnection.on("UpdateMessage", (message: IMessage) => {
             setMessages((prevMessages) =>
               prevMessages.map((msg) =>
-                msg.id === messageId ? { ...msg, content: newMessage } : msg
+                msg.id === message.id ? { ...msg, message } : msg
               )
             );
           });

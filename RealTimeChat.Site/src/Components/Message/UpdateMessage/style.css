@@ -1,0 +1,38 @@
+.update-message-container
+{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.update-message-container:hover
+{
+  cursor: pointer;
+}
+
+
+.update-message-container > input
+{
+  background-color: gray;
+  flex: 1;
+  border: 1px solid white;
+  outline: none;
+  border-radius: 6px;
+  color: white;
+  width: 60%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.update-message-container > input::placeholder
+{
+  color: white;
+}
+
+.update-message-actions
+{
+  display: flex;
+  justify-content: center;
+  font-size: x-large;
+  align-items: center;
+}
