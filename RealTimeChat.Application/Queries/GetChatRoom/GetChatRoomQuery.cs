@@ -4,7 +4,7 @@ using RealTimeChat.Core.DTOs;
 
 namespace RealTimeChat.Application.Queries.GetChatRoom;
 
-public class GetChatRoomQuery : IRequest<Result>
+public class GetChatRoomQuery : IRequest<ResultDTO>
 {
     public Guid ChatRoomId { get; set; }
 }

@@ -1,6 +1,5 @@
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using RealTimeChat.Core.Entities;
 
 namespace RealTimeChat.Infrastructure.Persistence.Context;

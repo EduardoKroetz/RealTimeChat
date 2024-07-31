@@ -45,7 +45,7 @@ public class ChatRoomRepository : IChatRoomRepository
         return await _dbContext.Messages
             .Include(x => x.Sender)
             .Where(m => m.ChatRoomId == chatRoomId)
-            .OrderBy(m => m.Timestamp)
+            .OrderByDescending(m => m.Timestamp)
             .Skip(skip)
             .Take(take)
             .ToListAsync();

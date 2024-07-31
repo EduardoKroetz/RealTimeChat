@@ -1,10 +1,12 @@
-﻿using RealTimeChat.Core.Entities;
+﻿using RealTimeChat.Core.DTOs;
+using RealTimeChat.Core.Entities;
 
 namespace RealTimeChat.Core.Repositories;
 
 public interface IMessageRepository
 {
     Task<Message?> GetByIdAsync(Guid messageId);
+    Task<GetMessageDTO?> GetDTOByIdAsync(Guid messageId);
     Task AddAsync(Message message);
     Task UpdateAsync(Message message);
     Task DeleteAsync(Message message);

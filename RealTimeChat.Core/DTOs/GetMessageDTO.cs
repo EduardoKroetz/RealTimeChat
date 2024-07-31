@@ -1,8 +1,8 @@
-﻿namespace RealTimeChat.Application.ViewModels;
+﻿namespace RealTimeChat.Core.DTOs;
 
-public class GetMessageViewModel
+public class GetMessageDTO
 {
-    public GetMessageViewModel(Guid id, string content, DateTime timestamp, Guid senderId, Guid chatRoomId, GetMessageUser sender)
+    public GetMessageDTO(Guid id, string content, DateTime timestamp, Guid senderId, Guid chatRoomId, GetMessageUserDTO sender)
     {
         Id = id;
         Content = content;
@@ -19,7 +19,7 @@ public class GetMessageViewModel
     public DateTime Timestamp { get; set; }
 
     public Guid SenderId { get; set; }
-    public GetMessageUser Sender { get; set; }
+    public GetMessageUserDTO Sender { get; set; }
 
     public Guid ChatRoomId { get; set; }
 }

@@ -1,13 +1,12 @@
 ﻿
 using MediatR;
-using RealTimeChat.Application.ViewModels;
 using RealTimeChat.Core.DTOs;
 using RealTimeChat.Core.Exceptions;
 using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Queries.GetChatRoom;
 
-public class GetChatRoomQueryHandler : IRequestHandler<GetChatRoomQuery, Result>
+public class GetChatRoomQueryHandler : IRequestHandler<GetChatRoomQuery, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
 
@@ -16,7 +15,7 @@ public class GetChatRoomQueryHandler : IRequestHandler<GetChatRoomQuery, Result>
         _chatRoomRepository = chatRoomRepository;
     }
 
-    public async Task<Result> Handle(GetChatRoomQuery request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(GetChatRoomQuery request, CancellationToken cancellationToken)
     {
         var chatRoom = await _chatRoomRepository.GetByIdAsync(request.ChatRoomId);
         if (chatRoom == null)
@@ -24,8 +23,8 @@ public class GetChatRoomQueryHandler : IRequestHandler<GetChatRoomQuery, Result>
             throw new NotFoundException("Chat room not found");
         }
 
-        var data = new GetChatRoomsViewModel(chatRoom.Id, chatRoom.Name, chatRoom.CreatedAt, chatRoom.CreatedBy);
+        var data = new GetChatRoomsDTO(chatRoom.Id, chatRoom.Name, chatRoom.CreatedAt, chatRoom.CreatedBy);
 
-        return Result.SuccessResult(data, "Success!");
+        return ResultDTO.SuccessResult(data, "Success!");
     }
 }

@@ -5,7 +5,7 @@ using RealTimeChat.Core.Services;
 
 namespace RealTimeChat.Application.Commands.LoginUser;
 
-public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result>
+public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ResultDTO>
 {
     private readonly IUserRepository _userRepository;
     private readonly IAuthService _authService;
@@ -16,7 +16,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result>
         _authService = authService;
     }
 
-    public async Task<Result> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUserByEmailAsync(request.Email);
         if (user == null)
@@ -32,6 +32,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result>
 
         var token = _authService.GenerateJwtToken(user.Id ,request.Email);
 
-        return Result.SuccessResult(new { token }, "Login successfully");
+        return ResultDTO.SuccessResult(new { token }, "Login successfully");
     }
 }

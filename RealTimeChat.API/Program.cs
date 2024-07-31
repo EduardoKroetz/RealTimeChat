@@ -11,10 +11,16 @@ using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Repositories;
 using RealTimeChat.API.Middlewares;
 using RealTimeChat.API.SignalR;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.MaxDepth = 0;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

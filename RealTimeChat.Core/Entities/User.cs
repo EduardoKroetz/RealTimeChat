@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealTimeChat.Core.Entities;
 
@@ -21,6 +22,8 @@ public class User
 
     public DateTime CreatedAt { get; set; }
 
+    [JsonIgnore]
     public ICollection<Message> SentMessages { get; set; } = [];
+    [JsonIgnore]
     public ICollection<RoomParticipant> RoomParticipants { get; set; } = [];
 }

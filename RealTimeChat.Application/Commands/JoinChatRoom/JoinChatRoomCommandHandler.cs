@@ -6,7 +6,7 @@ using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Commands.JoinChatRoom;
 
-public class JoinChatRoomCommandHandler : IRequestHandler<JoinChatRoomCommand, Result>
+public class JoinChatRoomCommandHandler : IRequestHandler<JoinChatRoomCommand, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
     private readonly IUserRepository _userRepository;
@@ -19,7 +19,7 @@ public class JoinChatRoomCommandHandler : IRequestHandler<JoinChatRoomCommand, R
         _roomParticipantRepository = roomParticipantRepository;
     }
 
-    public async Task<Result> Handle(JoinChatRoomCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(JoinChatRoomCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null)
@@ -48,6 +48,6 @@ public class JoinChatRoomCommandHandler : IRequestHandler<JoinChatRoomCommand, R
 
         await _roomParticipantRepository.AddAsync(roomParticipant);
 
-        return Result.SuccessResult(new { UserId = user.Id, ChatRoomId = chatRoom.Id, RoomParticipantId = roomParticipant.Id }, $"User has successfully entered the chat room");
+        return ResultDTO.SuccessResult(new { UserId = user.Id, ChatRoomId = chatRoom.Id, RoomParticipantId = roomParticipant.Id }, $"User has successfully entered the chat room");
     }
 }

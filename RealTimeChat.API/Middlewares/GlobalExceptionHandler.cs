@@ -10,7 +10,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        var result = Result.FailureResult(exception.Message);
+        var result = ResultDTO.FailureResult(exception.Message);
 
         switch (exception)
         {
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             break;
             case DbUpdateException _:
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                result = Result.FailureResult("Unable to update database");
+                result = ResultDTO.FailureResult("Unable to update database");
             break;
             default:
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

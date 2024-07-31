@@ -5,7 +5,7 @@ using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Commands.CreateChatRoom;
 
-public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomCommand, Result>
+public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomCommand, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
     private readonly IRoomParticipantRepository _roomParticipantRepository;
@@ -16,7 +16,7 @@ public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomComman
         _roomParticipantRepository = roomParticipantRepository;
     }
 
-    public async Task<Result> Handle(CreateChatRoomCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(CreateChatRoomCommand request, CancellationToken cancellationToken)
     {
         var chatRoom = new ChatRoom
         {
@@ -39,6 +39,6 @@ public class CreateChatRoomCommandHandler : IRequestHandler<CreateChatRoomComman
 
         await _roomParticipantRepository.AddAsync(roomParticipant);
 
-        return Result.SuccessResult(new { id = chatRoom.Id, roomParticipantId = roomParticipant.Id }, "Chat room successfully created");
+        return ResultDTO.SuccessResult(new { id = chatRoom.Id, roomParticipantId = roomParticipant.Id }, "Chat room successfully created");
     }
 }

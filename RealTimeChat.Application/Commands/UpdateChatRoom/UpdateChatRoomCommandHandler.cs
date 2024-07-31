@@ -7,7 +7,7 @@ using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Commands.UpdateChatRoom;
 
-public class UpdateChatRoomCommandHandler : IRequestHandler<UpdateChatRoomCommand, Result>
+public class UpdateChatRoomCommandHandler : IRequestHandler<UpdateChatRoomCommand, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
 
@@ -15,7 +15,7 @@ public class UpdateChatRoomCommandHandler : IRequestHandler<UpdateChatRoomComman
     {
         _chatRoomRepository = chatRoomRepository;
     }
-    public async Task<Result> Handle(UpdateChatRoomCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(UpdateChatRoomCommand request, CancellationToken cancellationToken)
     {
         var chatRoom = await _chatRoomRepository.GetByIdAsync(request.Id);
         if (chatRoom == null)
@@ -27,6 +27,6 @@ public class UpdateChatRoomCommandHandler : IRequestHandler<UpdateChatRoomComman
 
         await _chatRoomRepository.UpdateAsync(chatRoom);
 
-        return Result.SuccessResult(new { id = chatRoom.Id }, "Chat room updated");
+        return ResultDTO.SuccessResult(new { id = chatRoom.Id }, "Chat room updated");
     }
 }

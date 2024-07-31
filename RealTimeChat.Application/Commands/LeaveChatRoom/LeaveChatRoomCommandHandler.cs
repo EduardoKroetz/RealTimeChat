@@ -5,7 +5,7 @@ using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Commands.LeaveChatRoom;
 
-public class LeaveChatRoomCommandHandler : IRequestHandler<LeaveChatRoomCommand, Result>
+public class LeaveChatRoomCommandHandler : IRequestHandler<LeaveChatRoomCommand, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
     private readonly IUserRepository _userRepository;
@@ -18,7 +18,7 @@ public class LeaveChatRoomCommandHandler : IRequestHandler<LeaveChatRoomCommand,
         _roomParticipantRepository = roomParticipantRepository;
     }
 
-    public async Task<Result> Handle(LeaveChatRoomCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(LeaveChatRoomCommand request, CancellationToken cancellationToken)
     {
         var roomParticipant = await _roomParticipantRepository.GetRoomParticipantByRoomAndUserId(request.ChatRoomId, request.UserId);
         if (roomParticipant == null)
@@ -28,6 +28,6 @@ public class LeaveChatRoomCommandHandler : IRequestHandler<LeaveChatRoomCommand,
 
         await _roomParticipantRepository.DeleteAsync(roomParticipant);
 
-        return Result.SuccessResult(new { request.UserId, request.ChatRoomId, roomParticipantId = roomParticipant.Id }, "User leave the chat room successfully");
+        return ResultDTO.SuccessResult(new { request.UserId, request.ChatRoomId, roomParticipantId = roomParticipant.Id }, "User leave the chat room successfully");
     }
 }

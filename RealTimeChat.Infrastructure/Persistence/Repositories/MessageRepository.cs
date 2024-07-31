@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealTimeChat.Core.DTOs;
 using RealTimeChat.Core.Entities;
 using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Context;
@@ -45,5 +46,16 @@ public class MessageRepository : IMessageRepository
     public async Task<IEnumerable<Message>> GetMessagesBySenderIdAsync(Guid senderId)
     {
         return await _dbContext.Messages.Where(x => x.SenderId == senderId).ToListAsync();
+    }
+
+    public async Task<GetMessageDTO?> GetDTOByIdAsync(Guid messageId)
+    {
+        return await _dbContext.Messages
+            .Include(x => x.Sender)
+            .Select(x => new GetMessageDTO
+            (
+                x.Id, x.Content, x.Timestamp, x.SenderId, x.ChatRoomId, new GetMessageUserDTO(x.SenderId, x.Sender.Username)
+            ))
+            .FirstOrDefaultAsync(x => x.Id == messageId);
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RealTimeChat.Core.DTOs;
 using RealTimeChat.Core.Entities;
 using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Context;
@@ -37,11 +38,12 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<User>> GetUsersInRoomAsync(Guid chatRoomId)
+    public async Task<IEnumerable<GetUserDTO>> GetUsersInRoomAsync(Guid chatRoomId)
     {
         return await _context.RoomParticipants
             .Where(rp => rp.ChatRoomId == chatRoomId)
-            .Select(rp => rp.User)
+            .Include(x => x.User)
+            .Select(rp => new GetUserDTO(rp.User.Id, rp.User.Username, rp.User.Email, rp.User.CreatedAt))
             .ToListAsync();
     }
 
@@ -50,9 +52,10 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
-    public async Task<IEnumerable<User>> GetAsync(int skip, int take)
+    public async Task<IEnumerable<GetUserDTO>> GetAsync(int skip, int take)
     {
         return await _context.Users
+            .Select(x => new GetUserDTO(x.Id, x.Username, x.Email, x.CreatedAt))
             .Skip(skip)
             .Take(take)
             .ToListAsync();

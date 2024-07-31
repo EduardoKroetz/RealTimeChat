@@ -5,7 +5,7 @@ using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Commands.DeleteChatRoom;
 
-public class DeleteChatRoomCommandHandler : IRequestHandler<DeleteChatRoomCommand, Result>
+public class DeleteChatRoomCommandHandler : IRequestHandler<DeleteChatRoomCommand, ResultDTO>
 {
     private readonly IChatRoomRepository _chatRoomRepository;
 
@@ -14,7 +14,7 @@ public class DeleteChatRoomCommandHandler : IRequestHandler<DeleteChatRoomComman
         _chatRoomRepository = chatRoomRepository;
     }
 
-    public async Task<Result> Handle(DeleteChatRoomCommand request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(DeleteChatRoomCommand request, CancellationToken cancellationToken)
     {
         var chatRoom = await _chatRoomRepository.GetByIdAsync(request.ChatRoomId);
         if (chatRoom == null)
@@ -24,6 +24,6 @@ public class DeleteChatRoomCommandHandler : IRequestHandler<DeleteChatRoomComman
 
         await _chatRoomRepository.DeleteAsync(chatRoom);
 
-        return Result.SuccessResult(new { id = request.ChatRoomId }, "Chat room deleted");
+        return ResultDTO.SuccessResult(new { id = request.ChatRoomId }, "Chat room deleted");
     }
 }

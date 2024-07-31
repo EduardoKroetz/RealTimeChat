@@ -1,13 +1,12 @@
 ﻿
 using MediatR;
-using RealTimeChat.Application.ViewModels;
 using RealTimeChat.Core.DTOs;
 using RealTimeChat.Core.Exceptions;
 using RealTimeChat.Core.Repositories;
 
 namespace RealTimeChat.Application.Queries.GetMessage;
 
-public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, Result>
+public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, ResultDTO>
 {
     private readonly IMessageRepository _messageRepository;
 
@@ -16,7 +15,7 @@ public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, Result>
         _messageRepository = messageRepository;
     }
 
-    public async Task<Result> Handle(GetMessageQuery request, CancellationToken cancellationToken)
+    public async Task<ResultDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
     {
         var message = await _messageRepository.GetByIdAsync(request.MessageId);
         if (message == null)
@@ -24,8 +23,8 @@ public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, Result>
             throw new NotFoundException("Message not found");
         }
 
-        var data = new GetMessageViewModel(message.Id, message.Content, message.Timestamp, message.SenderId, message.ChatRoomId, new GetMessageUser(message.Sender.Id,message.Sender.Username));
+        var data = new GetMessageDTO(message.Id, message.Content, message.Timestamp, message.SenderId, message.ChatRoomId, new GetMessageUserDTO(message.Sender.Id,message.Sender.Username));
 
-        return Result.SuccessResult(data, "Success!");   
+        return ResultDTO.SuccessResult(data, "Success!");   
     }
 }

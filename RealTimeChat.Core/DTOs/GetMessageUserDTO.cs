@@ -1,8 +1,8 @@
-﻿namespace RealTimeChat.Application.ViewModels;
+﻿namespace RealTimeChat.Core.DTOs;
 
-public class GetMessageUser
+public class GetMessageUserDTO
 {
-    public GetMessageUser(Guid userId, string username)
+    public GetMessageUserDTO(Guid userId, string username)
     {
         UserId = userId;
         Username = username;

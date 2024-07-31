@@ -3,7 +3,7 @@ using RealTimeChat.Core.DTOs;
 
 namespace RealTimeChat.Application.Queries.GetUser;
 
-public class GetUserQuery : IRequest<Result>
+public class GetUserQuery : IRequest<ResultDTO>
 {
     public Guid UserId { get; set; }
 }

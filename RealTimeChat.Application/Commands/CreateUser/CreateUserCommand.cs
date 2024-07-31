@@ -3,7 +3,7 @@ using RealTimeChat.Core.DTOs;
 
 namespace RealTimeChat.Application.Commands.CreateUser;
 
-public class CreateUserCommand : IRequest<Result>
+public class CreateUserCommand : IRequest<ResultDTO>
 {
     public string Username { get; set; }
     public string Password { get; set; }

@@ -52,7 +52,8 @@ public class ChatHub : Hub
 
         await _messageRepository.AddAsync(chatMessage);
 
-        chatMessage.Sender = await _userRepository.GetByIdAsync(userId) ?? throw new Exception("Sender not found");
+        var user = await _userRepository.GetByIdAsync(userId) ?? throw new Exception("Sender not found");
+        chatMessage.Sender = new User{ Id = user.Id, Email = user.Email, Username = user.Username, CreatedAt = user.CreatedAt };
 
         await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", chatMessage);
         _logger.LogInformation("Message sent successfully!");
