@@ -27,8 +27,8 @@ export default function LoginPage()
   return (
     <div className="login-page-container">
       <div className="login-info">
-        <h1>RealTimeChat</h1>
-        <p>Site para envio de mensagens em tempo real</p>
+        <h1>RealTimeChat - Login</h1>
+        <p>Website for sending messages in real time</p>
       </div>
       <div className="form-container">
         <div className="login-input-container">
@@ -41,7 +41,7 @@ export default function LoginPage()
         </div>
 
         <div className="login-input-container">
-          <label htmlFor="password">Senha</label>
+          <label htmlFor="password">Password</label>
           <input 
             type="text" 
             id="password"
@@ -49,13 +49,13 @@ export default function LoginPage()
             onChange={(e) => setPassword(e.currentTarget.value)} /> 
         </div>
 
-        <button className="login-button" onClick={() => handleSubmit()}>Entrar</button>
+        <button className="login-button" onClick={() => handleSubmit()}>Login</button>
         <hr />
       </div>
       <div className="login-register-container">
-        <p>Ainda não se registrou?</p>
+        <p>Haven't registered yet?</p>
         <Link to={"/register"}>
-          <button className="register-button">Registre-se</button>
+          <button className="register-button">Register</button>
         </Link>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import './App.css'
 
-import ChatRoomPage from './pages/ChatRoom/index.tsx';
 import HomePage from './pages/Home/index.tsx';
 import { useContext, useEffect, useState } from 'react';
 import hubConnection from './SignalR/hubConnection.ts';
@@ -9,6 +8,8 @@ import LoginPage from './pages/Login/index.tsx';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from './Contexts/AuthContext.tsx';
 import RegisterPage from './pages/Register/index.tsx';
+import BaseLayout from './Layout/BaseLayout.tsx';
+import ChatRoom from './Components/ChatRoom/index.tsx';
 
 function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -39,14 +40,15 @@ function App() {
     return <></>
 
   return (
-    <div className="app">
-      <Routes>
-        <Route path="/" Component={HomePage}/>
-        <Route path="/login" Component={LoginPage} />
-        <Route path="/register" Component={RegisterPage} />
-        <Route path="/chatrooms/:id" Component={() => <ChatRoomPage isConnected={isConnected}/>}/>
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<BaseLayout/>}>
+        <Route index Component={HomePage}/>
+        <Route path="/chatrooms/:id" Component={() => <ChatRoom isConnected={isConnected}/>}/>
+      </Route>
+      <Route path="/login" Component={LoginPage} />
+      <Route path="/register" Component={RegisterPage} />
+
+    </Routes>
   )
 }
 

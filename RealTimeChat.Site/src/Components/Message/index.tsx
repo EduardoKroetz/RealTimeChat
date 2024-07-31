@@ -93,7 +93,7 @@ export default function Message({ content, id, sender, senderId, timestamp, last
           )}
           {isMyMessage && (
             <div className="user-message-actions">
-              <i className={messageActionDropDown ? "fas fa-times-circle" : "fas fa-ellipsis-h"} onClick={handleDropDown}></i>
+              <i title={`${messageActionDropDown ? "Fechar" : "Editar mensagem"}`} className={messageActionDropDown ? "fas fa-times-circle" : "fas fa-ellipsis-h"} onClick={handleDropDown}></i>
             </div>
           )}
         </div>
@@ -110,8 +110,8 @@ export default function Message({ content, id, sender, senderId, timestamp, last
         {messageActionDropDown &&
           (
             <div className="message-action-drop-down">
-              <i className="fas fa-trash-alt" onClick={handleDeleteAction}></i> 
-              <i className="fas fa-edit" onClick={() => setUpdateMessage(true)}></i>
+              <i title="Excluir" className="fas fa-trash-alt" onClick={handleDeleteAction}></i> 
+              <i title="Editar" className="fas fa-edit" onClick={() => setUpdateMessage(true)}></i>
             </div>
           )}
       </div>

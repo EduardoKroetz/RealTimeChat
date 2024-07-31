@@ -28,12 +28,12 @@ export default function RegisterPage()
   return (
     <div className="register-page-container">
       <div className="register-info">
-        <h1>RealTimeChat</h1>
-        <p>Site para envio de mensagens em tempo real</p>
+        <h1>RealTimeChat - Register</h1>
+        <p>Website for sending messages in real time</p>
       </div>
       <div className="form-container">
         <div className="register-input-container">
-          <label htmlFor="username">Nome de usuário</label>
+          <label htmlFor="username">Username</label>
           <input 
             type="text" 
             id="username"
@@ -51,7 +51,7 @@ export default function RegisterPage()
         </div>
 
         <div className="register-input-container">
-          <label htmlFor="password">Senha</label>
+          <label htmlFor="password">Password</label>
           <input 
             type="text" 
             id="password"
@@ -59,13 +59,13 @@ export default function RegisterPage()
             onChange={(e) => setPassword(e.currentTarget.value)} /> 
         </div>
 
-        <button className="register-button" onClick={() => handleSubmit()}>Registrar</button>
+        <button className="register-button" onClick={() => handleSubmit()}>Register</button>
         <hr />
       </div>
       <div className="register-login-container">
-        <p>Já se registrou?</p>
+        <p>Already registered?</p>
         <Link to={"/login"}>
-          <button className="login-button">Entrar</button>
+          <button className="login-button">Login</button>
         </Link>
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function UpdateMessage(
     <div className="update-message-container">
       <input ref={inputRef} type="text" value={messageContent} onChange={(ev) => setMessageContent(ev.currentTarget.value)} placeholder="Nova mensagem..."/>
       <div className="update-message-actions">
-        <i className="fas fa-check-circle" onClick={handleUpdateAction}></i>
+        <i title="Salvar" className="fas fa-check-circle" onClick={handleUpdateAction}></i>
       </div>
     </div>
   )

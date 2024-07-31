@@ -9,7 +9,7 @@
 .send-message-input
 {
   border: 0;
-  padding: 1rem;
+  padding: .9rem;
   background-color: gray;
   border-radius: 5px;
   flex: 1;
