@@ -4,9 +4,8 @@ import ChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css"
 import Conversation from "../Conversation";
 import api from "../../api/axiosConfig";
-import React from "react";
 
-const Conversations = React.memo(() =>
+const Conversations = () =>
 {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +41,6 @@ const Conversations = React.memo(() =>
     
     </div>
   )
-})
+}
 
 export default Conversations

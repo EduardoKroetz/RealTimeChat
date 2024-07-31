@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import IMessage from "../../Interfaces/IMessage";
 import IChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css";
@@ -15,11 +15,11 @@ import { format,  isToday, isYesterday } from "date-fns";
 
 interface chatRoomProps
 {
-  isConnected: boolean
+  isConnected: boolean,
+  id: string
 }
 
-export default function ChatRoom({isConnected}: chatRoomProps) {
-  const { id } = useParams();
+export default function ChatRoom({isConnected, id}: chatRoomProps) {
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const screenWidth = useContext(ScreenWidthContext);

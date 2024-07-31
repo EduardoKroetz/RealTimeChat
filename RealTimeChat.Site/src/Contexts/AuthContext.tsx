@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import IUser from "../Interfaces/IUser";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 
 interface IAuthContextData
@@ -18,6 +18,7 @@ const AuthContextProvider = ({children}: any) =>
   const [jwtToken, setJwtToken] = useState<string>("");
   const [user, setUser] = useState<IUser | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   //Get token from cookie
   useEffect(() =>
@@ -41,12 +42,9 @@ const AuthContextProvider = ({children}: any) =>
 
       getUser();
     }
-    else
+    else if (location.pathname !== "/login" && location.pathname !== "/register")
       navigate("/login")
     
-
-
-   
   }, [])
 
   return (

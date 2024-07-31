@@ -1,19 +1,17 @@
 import './App.css'
 
 import HomePage from './pages/Home/index.tsx';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import hubConnection from './SignalR/hubConnection.ts';
 import { HubConnectionState } from '@microsoft/signalr';
 import LoginPage from './pages/Login/index.tsx';
 import { Route, Routes } from 'react-router-dom';
-import { AuthContext } from './Contexts/AuthContext.tsx';
 import RegisterPage from './pages/Register/index.tsx';
 import BaseLayout from './Layout/BaseLayout.tsx';
-import ChatRoom from './Components/ChatRoom/index.tsx';
+import ChatRoomWrapper from './Components/ChatRoomWrapper/index.tsx';
 
 function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const { jwtToken } = useContext(AuthContext);
 
   //Connect to chat hub
   useEffect(() => {
@@ -36,14 +34,11 @@ function App() {
     };
   }, []);
 
-  if (!jwtToken)
-    return <></>
-
   return (
     <Routes>
-      <Route path="/" element={<BaseLayout/>}>
+      <Route path="/" element={<BaseLayout />}>
         <Route index Component={HomePage}/>
-        <Route path="/chatrooms/:id" Component={() => <ChatRoom isConnected={isConnected}/>}/>
+        <Route path="/chatrooms/:id" Component={() => <ChatRoomWrapper isConnecte={isConnected}/>}/>
       </Route>
       <Route path="/login" Component={LoginPage} />
       <Route path="/register" Component={RegisterPage} />
