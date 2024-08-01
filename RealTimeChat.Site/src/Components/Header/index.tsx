@@ -17,7 +17,7 @@ export default function Header()
         <h1 className="header-title">RealTimeChat</h1>
       </Link>
       <div className="header-content">
-        {screenWidth > 425 && 
+        {screenWidth >= 425 && 
           <SearchRooms />
         }
         <div className="header-user-info">

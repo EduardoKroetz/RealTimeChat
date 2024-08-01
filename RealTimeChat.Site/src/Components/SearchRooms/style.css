@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: end;
   background-color: white;
-  border-radius: 4px;
 }
 
 .search-rooms-input
@@ -36,13 +35,14 @@
   .search-rooms-container
   {
     max-width: 440px;
+    border-radius: 4px;
   }
 
   .search-rooms-input
   {
     background-color: white;
     border-radius: 4px;
-    color: rgb(93, 93, 93) ;
+    color: var(--text-color) ;
   }
 
   .search-rooms-input

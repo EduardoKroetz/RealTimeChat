@@ -24,17 +24,17 @@
 
 i.join
 {
-  color: rgb(40, 167, 69);
+  color: var(--secondary-color);
 }
 
 i.talk
 {
-  color: rgb(0, 123, 255);
+  color: var(--primary-color);
 }
 
 i.leave
 {
-  color: red;
+  color: var(--accent-color);
 }
 
 .room-search-actions > i

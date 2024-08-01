@@ -1,11 +1,11 @@
 .conversations-container
 {
   flex: 1;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: .2rem;
   border-right: 1px solid gray;
+  justify-content: space-between;
 }
 
 .arrow-left

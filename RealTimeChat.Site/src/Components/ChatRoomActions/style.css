@@ -1,0 +1,80 @@
+.chat-room-actions-container
+{
+  display: flex;
+  height: 35px;
+  padding: .8rem;
+  align-items: center;
+  background-color: var(--secondary-background-color);
+  gap: 1rem;
+}
+
+.new-room-container
+{
+  border-radius: 30%;
+}
+
+.new-room-container:hover
+{
+  cursor: pointer;
+  
+}
+
+.new-room-container > i
+{
+  transition: 190ms;
+  font-size: larger;
+  color: var(--secondary-color);
+}
+
+.new-room-container > i:hover {
+  color: white;
+}
+
+/* Create chat */
+
+.create-chat-container
+{
+  flex: 1;
+  display: flex;
+  gap: 1.5rem;
+  visibility: hidden;
+  opacity: 0;
+  max-width: 0;
+  transform-origin: left center;
+  transition: max-width 300ms linear, visibility 300ms linear, opacity 300ms linear;
+}
+
+.create-chat-container.open
+{
+  visibility: visible;
+  opacity: 1;
+  max-width: 100%;
+}
+
+.create-chat-input
+{
+  flex: 1;
+  border: 0;
+  border-radius: 3px;
+  padding: .3rem;
+  color: var(--text-color);
+  outline: none;
+  width: 0;
+}
+
+.create-chat-icon
+{
+  padding: .5rem;
+  font-size: larger;
+  border-radius: 3px;
+  border: 0;
+  background-color: var(--primary-color);
+}
+
+.create-chat-icon:hover
+{
+  transition: 190ms;
+  background-color: white;
+  color: var(--primary-color);
+  cursor: pointer;
+}

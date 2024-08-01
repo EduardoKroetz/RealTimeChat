@@ -2,6 +2,7 @@ import "./style.css"
 import Conversation from "../Conversation";
 import { useContext } from "react";
 import { AuthContext } from "../../Contexts/AuthContext";
+import ChatRoomActions from "../ChatRoomActions";
 
 const Conversations = () =>
 {
@@ -18,7 +19,7 @@ const Conversations = () =>
           <Conversation chatRoomName={chatRoom.name} chatRoomId={chatRoom.id} key={chatRoom.id} />
         )}
       </div>
-    
+      <ChatRoomActions />
     </div>
   )
 }
