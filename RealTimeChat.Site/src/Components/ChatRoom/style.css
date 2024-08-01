@@ -7,7 +7,7 @@
 
 .chatroom-info
 {
-  background-color: rgba(128, 128, 128, 0.62);
+  background-color: var(--secondary-background-color);
   padding: 1rem;
   display: flex;
   min-height: 37px;

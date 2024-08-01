@@ -4,7 +4,7 @@
   flex-direction: column;
   min-width: 100vw;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.729);
+  background-color: var(--background-color);
 
 }
 

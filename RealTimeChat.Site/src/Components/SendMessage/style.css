@@ -10,7 +10,7 @@
 {
   border: 0;
   padding: .9rem;
-  background-color: gray;
+  background-color: var(--secondary-background-color);
   border-radius: 5px;
   flex: 1;
 }

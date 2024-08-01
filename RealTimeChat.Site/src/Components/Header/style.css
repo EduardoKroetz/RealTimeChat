@@ -1,13 +1,14 @@
 .header-container
 {
   position: relative;
-  background-color: gray;
+  background-color: var(--secondary-background-color);
   width: 100%;
   max-height: 50px;
   display: flex;
   align-items: center;
   padding: .4rem 0rem;
   justify-content: space-between;
+  border-bottom: 1px solid gray;
 }
 
 .header-container h1

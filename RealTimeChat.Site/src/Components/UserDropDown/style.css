@@ -1,7 +1,7 @@
 
 .user-drop-down-container {
   position: absolute;
-  background-color: white;
+  background-color: var(--secondary-background-color);
   width: 260px;
   height: 300px;
   border-radius: 6px 0px 6px 6px;
@@ -37,7 +37,6 @@
 
 .user-drop-down-content-container > label
 {
-  color: black;
   font-weight: bold;
 }
 
