@@ -3,7 +3,7 @@ using RealTimeChat.Application.Commands.CreateChatRoom;
 using RealTimeChat.Application.Commands.CreateUser;
 using RealTimeChat.Application.Commands.JoinChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
-using RealTimeChat.Application.ViewModels;
+using RealTimeChat.Core.DTOs;
 using RealTimeChat.IntegrationTests.Utils;
 using System.Net;
 using System.Net.Http.Json;

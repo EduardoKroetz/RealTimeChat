@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RealTimeChat.Application.Commands.CreateUser;
-using RealTimeChat.Application.ViewModels;
+using RealTimeChat.Core.DTOs;
 using RealTimeChat.IntegrationTests.Utils;
 using System.Net;
 using System.Net.Http.Json;

@@ -21,33 +21,21 @@ public class JoinChatRoomCommandHandler : IRequestHandler<JoinChatRoomCommand, R
 
     public async Task<ResultDTO> Handle(JoinChatRoomCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
-        if (user == null)
+        var roomParticipantExists = await _roomParticipantRepository.GetRoomParticipantByRoomAndUserId(request.ChatRoomId, request.UserId);
+        if (roomParticipantExists != null)
         {
-            throw new NotFoundException("User not found");
-        }
-
-        var chatRoom = await _chatRoomRepository.GetByIdAsync(request.ChatRoomId);
-        if (chatRoom == null)
-        {
-            throw new NotFoundException("Chat room not found");
-        }
-
-        var userChatRooms = await _chatRoomRepository.GetUserChatRoomsAsync(user.Id);
-        if (userChatRooms.Contains(chatRoom))
-        {
-            throw new InvalidOperationException("This user is already in this chat room");
+            throw new InvalidOperationException("You are already in this chat room");
         }
 
         var roomParticipant = new RoomParticipant
         {
             Id = Guid.NewGuid(),
-            ChatRoomId = chatRoom.Id,
-            UserId = user.Id
+            ChatRoomId = request.ChatRoomId,
+            UserId = request.UserId
         };
 
         await _roomParticipantRepository.AddAsync(roomParticipant);
 
-        return ResultDTO.SuccessResult(new { UserId = user.Id, ChatRoomId = chatRoom.Id, RoomParticipantId = roomParticipant.Id }, $"User has successfully entered the chat room");
+        return ResultDTO.SuccessResult(new { request.UserId,request.ChatRoomId, RoomParticipantId = roomParticipant.Id }, $"User has successfully entered the chat room");
     }
 }

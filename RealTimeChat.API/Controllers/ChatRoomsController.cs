@@ -8,6 +8,7 @@ using RealTimeChat.Application.Commands.LeaveChatRoom;
 using RealTimeChat.Application.Commands.UpdateChatRoom;
 using RealTimeChat.Application.Queries.GetAllChatRooms;
 using RealTimeChat.Application.Queries.GetChatRoom;
+using RealTimeChat.Application.Queries.GetChatRoomsByName;
 using RealTimeChat.Application.Queries.GetUserChatRooms;
 using System.Security.Claims;
 
@@ -33,6 +34,15 @@ public class ChatRoomsController : ControllerBase
         var query = new GetChatRoomQuery { ChatRoomId = chatRoomId };
         var result = await _mediator.Send(query);
         _logger.LogInformation($"Get Chat room {chatRoomId} successfully!");
+        return Ok(result);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> GetChatRoomsByNameAsync([FromQuery] string? name)
+    {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var query = new GetChatRoomByNameQuery { Name = name ?? "", UserId = userId };
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 
@@ -66,7 +76,7 @@ public class ChatRoomsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("{chatRoomId:guid}/join/{userId:guid}")]
+    [HttpPost("join/{chatRoomId:guid}")]
     public async Task<IActionResult> JoinAsync([FromRoute] Guid chatRoomId)
     {
         var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -76,7 +86,7 @@ public class ChatRoomsController : ControllerBase
     }
 
 
-    [HttpDelete("{chatRoomId:guid}/leave")]
+    [HttpDelete("leave/{chatRoomId:guid}")]
     public async Task<IActionResult> LeaveAsync([FromRoute] Guid chatRoomId)
     {
         var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);

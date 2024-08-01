@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealTimeChat.Core.DTOs;
 using RealTimeChat.Core.Entities;
 using RealTimeChat.Core.Repositories;
 using RealTimeChat.Infrastructure.Persistence.Context;
@@ -64,6 +65,16 @@ public class ChatRoomRepository : IChatRoomRepository
         return await _dbContext.ChatRooms
             .Skip(skip)
             .Take(take)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<GetChatRoomsDTO>> GetChatRoomsByName(Guid userId ,string name)
+    {
+        return await _dbContext.ChatRooms
+            .Where(x => x.Name.Contains(name))
+            .Include(x => x.RoomParticipants)
+            .OrderByDescending(x => x.RoomParticipants.Any(x => x.UserId == userId))
+            .Select(x => new GetChatRoomsDTO(x.Id, x.Name, x.CreatedAt, x.CreatedBy))
             .ToListAsync();
     }
 }
