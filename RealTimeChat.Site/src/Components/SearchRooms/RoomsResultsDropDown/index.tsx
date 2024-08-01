@@ -27,7 +27,6 @@ export default function RoomsResultsDropDown({ results, resultsIsOpen, setResult
       document.removeEventListener("click", handleLeaveDropDown)
     }
   }, [resultsIsOpen])
-  console.log(results.length * 50)
 
   return (
     <div 

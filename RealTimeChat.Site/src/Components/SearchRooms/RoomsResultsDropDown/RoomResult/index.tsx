@@ -12,7 +12,6 @@ export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom,
   const { myGroups, setMyGroups } = useContext(AuthContext);
 
   const handleJoinGroup = async () => {
-    setDropDownIsOpen(false);
     const response = await api.post(`/chatrooms/join/${room.id}`)
     if (response.status === 200)
     {
@@ -25,7 +24,6 @@ export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom,
   }
 
   const handleLeaveGroup = async () => {
-    setDropDownIsOpen(false);
     const response = await api.delete(`/chatrooms/leave/${room.id}`)
     if (response.status === 200)
     {

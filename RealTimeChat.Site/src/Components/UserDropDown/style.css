@@ -1,7 +1,7 @@
 
 .user-drop-down-container {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.907);
+  background-color: white;
   width: 260px;
   height: 300px;
   border-radius: 6px 0px 6px 6px;
@@ -35,8 +35,21 @@
   align-items: center;
 }
 
+.user-drop-down-content-container > label
+{
+  color: black;
+  font-weight: bold;
+}
+
+.user-drop-down-content-container > input::placeholder
+{
+  color: gray;
+}
+
 .user-drop-down-content-container > input {
   padding: 0.3rem;
+  color: rgb(73, 73, 73);
+
 }
 
 .user-drop-down-actions {
@@ -51,6 +64,11 @@
 
 .user-drop-down-actions > i:hover {
   cursor: pointer;
+}
+
+i.logout
+{
+  color: rgb(216, 1, 1);
 }
 
 

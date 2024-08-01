@@ -79,7 +79,7 @@ export default function UserDropDown({
         </div>
       </div>
       <div className="user-drop-down-actions">
-        <i onClick={handleLogout} title="End session" className="fas fa-sign-out-alt"></i>
+        <i onClick={handleLogout} title="End session" className="fas fa-sign-out-alt logout"></i>
       </div>
     </div>
   );
