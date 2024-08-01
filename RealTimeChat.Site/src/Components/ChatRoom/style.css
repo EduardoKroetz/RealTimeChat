@@ -12,24 +12,28 @@
   display: flex;
   min-height: 37px;
   gap: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.back-link
+.chatroom-info > i.leave
 {
-  width: 30px;
-  padding: 6px;
+  font-size: larger;
+}
+
+.back-icon
+{
+  padding: 8px;
   border-radius: 100%;
   display: flex;
+  font-size: large;
 }
 
-.back-link:hover
+.back-icon:hover
 {
   background-color: gray;
-}
-
-.back-link img
-{
-  width: 30px;
+  transition: 190ms;
 }
 
 .chatroom-messages

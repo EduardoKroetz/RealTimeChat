@@ -5,6 +5,7 @@ import { AuthContext } from "../../../../Contexts/AuthContext";
 import "./style.css"
 import api from "../../../../api/axiosConfig";
 import { Link } from "react-router-dom";
+import { leaveChatRoom } from "../../../../services/leaveChatRoom";
 
 export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom, setDropDownIsOpen: React.Dispatch<SetStateAction<boolean>> })
 {
@@ -24,19 +25,20 @@ export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom,
   }
 
   const handleLeaveGroup = async () => {
-    const response = await api.delete(`/chatrooms/leave/${room.id}`)
-    if (response.status === 200)
+    const leave = await leaveChatRoom(room.id);
+    if (leave)
     {
       setMyGroups((prevValue) => prevValue.filter((group) => group.id !== room.id))
       setUserAlreadyInGroup(false);
     }
   }
 
-
   useEffect(() =>
   {
     if (myGroups.find(x => x.id === room.id))
       setUserAlreadyInGroup(true);
+    else
+      setUserAlreadyInGroup(false);
   }, [myGroups])
 
   return (

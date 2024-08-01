@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import IMessage from "../../Interfaces/IMessage";
 import IChatRoom from "../../Interfaces/IChatRoom";
 import "./style.css";
@@ -12,6 +12,8 @@ import api from "../../api/axiosConfig";
 import { AxiosResponse } from "axios";
 import IResponse from "../../Interfaces/IResponse";
 import { format,  isToday, isYesterday } from "date-fns";
+import { leaveChatRoom } from "../../services/leaveChatRoom";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 interface chatRoomProps
 {
@@ -29,6 +31,8 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
   const [isLimitMessages, setIsLimitMessages] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [firstElement, setFirstElement] = useState<HTMLElement>(null!);
+  const { setMyGroups } = useContext(AuthContext);
+  const navigate = useNavigate();
   const messagesRef = useRef<HTMLDivElement>(null); 
 
   // Get messages from chat room with pagination
@@ -164,9 +168,9 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
   // Helper function to render date dividers
   const renderDateDivider = (timestamp: Date) => {
     if (isToday(timestamp)) {
-      return <div className="line-with-message">Hoje</div>;
+      return <div className="line-with-message">Today</div>;
     } else if (isYesterday(timestamp)) {
-      return <div className="line-with-message">Ontem</div>;
+      return <div className="line-with-message">Yesterday</div>;
     } else {
       return <div className="line-with-message">{format(new Date(timestamp), "dd/MM/yyyy")}</div>;
     }
@@ -191,6 +195,19 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
     }
   }, [handleScroll]);
 
+
+  const handleLeaveGroup = async () =>
+  {
+    if (!chatRoom)
+      return
+    
+    const leave = await leaveChatRoom(chatRoom.id);
+    if (leave)
+    {
+      setMyGroups((prevValue) => prevValue.filter((group) => group.id !== chatRoom.id))
+      navigate("/")
+    }
+  }
   //Component
 
   if (!chatRoom && chatRoomLoaded) {
@@ -201,11 +218,12 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
     <div className="chatroom-container">
       <div className="chatroom-info">
         {screenWidth < 768 && (
-          <Link to={"/"} className="back-link">
-            <img src="/arrow-left.png" alt="Voltar" />
+          <Link to={"/"} >
+            <i className="fas fa-arrow-left back-icon" title="Back"></i>
           </Link>
-        )}
+        )}           
         <h2>{chatRoom?.name}</h2>
+        <i title="Leave" onClick={handleLeaveGroup} style={{marginRight: "25px"}} className="fas fa-sign-out-alt leave"></i>
       </div>
       <div className="chatroom-messages" ref={messagesRef}>
         <>

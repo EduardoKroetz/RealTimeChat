@@ -27,10 +27,12 @@ const AuthContextProvider = ({children}: any) =>
   //Get token from cookie
   useEffect(() =>
   {
+    const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
+
     const getUser = async () =>{
-      const response = await api.get(`/users`, { headers: { Authorization: "Bearer "+ token } });
-      if (response.status === 200)
-        setUser(response.data.data);
+        const response = await api.get(`/users`, { headers: { Authorization: "Bearer "+ token } });
+        if (response.status === 200)
+          setUser(response.data.data);
     }
 
     const getMyGroups = async () => {
@@ -43,18 +45,45 @@ const AuthContextProvider = ({children}: any) =>
     if (token)
     {
       setJwtToken(token);
+      //Add token to headers
       api.interceptors.request.use(
         config => {
           config.headers['Authorization'] = "Bearer " + token;        
           return config;
         },
-        error => Promise.reject(error)
+        function (error)
+        {
+          if (error.response)
+          {
+            if (error.response.status === 401)
+            {
+              navigate("/login")
+            }
+          }
+        }
       );
 
-      getUser();
-      getMyGroups();
+      //check if response has status 401 and redirect to login page
+      api.interceptors.response.use(
+        response => {
+          return response;
+        },
+        error => {
+          if (error.response)
+          {
+            if (error.response.status === 401)
+              navigate("/login")
+          }
+        }
+      )
+
+      if (!isLoginPage)
+      {
+        getUser();
+        getMyGroups();
+      }
     }
-    else if (location.pathname !== "/login" && location.pathname !== "/register")
+    else if (!isLoginPage)
       navigate("/login")
     
   }, [])
