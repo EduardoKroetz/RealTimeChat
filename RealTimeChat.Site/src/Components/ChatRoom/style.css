@@ -8,10 +8,10 @@
 .chatroom-info
 {
   background-color: var(--secondary-background-color);
-  padding: 1rem;
+  padding: 10px;
   display: flex;
   min-height: 37px;
-  gap: 2rem;
+  gap: .5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +27,7 @@
   padding: 8px;
   border-radius: 100%;
   display: flex;
-  font-size: large;
+  font-size: x-large;
 }
 
 .back-icon:hover
@@ -53,18 +53,22 @@
 .actions-container
 {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1.5rem;
   font-size: larger;
+  margin-right: 10px;
 }
 
-
-@media (min-width: 768px)
+.fa-check
 {
-  .chatroom-messages
-  {
-    padding: 1rem;
-  }
+  color: var(--secondary-color);
 }
+
+.fa-trash-alt
+{
+  color: var(--accent-color);
+}
+
 
 /* Line-with-message */
 .line-with-message {
@@ -92,3 +96,22 @@
 .line-with-message {
   padding: 0 10px;
 }
+
+
+@media (min-width: 380px)
+{
+  .actions-container
+  {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 768px)
+{
+  .chatroom-messages
+  {
+    padding: 1rem;
+  }
+}
+

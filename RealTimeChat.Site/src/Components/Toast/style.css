@@ -1,0 +1,29 @@
+.toast-container {
+  position: fixed;
+  right: 20px;
+  bottom: 13%; 
+  max-height: 100px;
+  z-index: 9999;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: .7rem;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  padding: .8rem;
+  max-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: right center;
+  transition: opacity .2s ease, visibility .2s ease, max-width .25s ease-out;
+  z-index: 10000; /* Garante que o conteúdo do toast fique acima do container do toast */
+}
+
+.toast-content.open {
+  visibility: visible;
+  opacity: 1;
+  max-width: 265px;
+}

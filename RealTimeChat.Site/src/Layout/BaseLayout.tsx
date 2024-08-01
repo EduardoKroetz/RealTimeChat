@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { ScreenWidthContext } from "../Contexts/ScreenWidthContext";
 import SearchRooms from "../Components/SearchRooms";
 import { AuthContext } from "../Contexts/AuthContext";
+import Toast from "../Components/Toast";
 
 
 export default function BaseLayout()
@@ -28,6 +29,7 @@ export default function BaseLayout()
         {screenWidth >= 768 && !isHomePage && <Conversations />}
         <Outlet />
       </div>
+      <Toast />
     </div>
   )
 }

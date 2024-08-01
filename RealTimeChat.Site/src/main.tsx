@@ -4,12 +4,15 @@ import './index.css'
 import { ScreenWidthContextProvider } from './Contexts/ScreenWidthContext.tsx'
 import { AuthContextProvider } from './Contexts/AuthContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
+import { ToastContextProvider } from './Contexts/ToastContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <AuthContextProvider>
       <ScreenWidthContextProvider>
-        <App />
+        <ToastContextProvider>
+          <App />
+        </ToastContextProvider>
       </ScreenWidthContextProvider>
     </AuthContextProvider>
   </BrowserRouter>

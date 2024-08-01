@@ -15,6 +15,7 @@ import { format,  isToday, isYesterday } from "date-fns";
 import { leaveChatRoom } from "../../services/leaveChatRoom";
 import { AuthContext } from "../../Contexts/AuthContext";
 import ChatName from "../ChatName";
+import { ToastContext } from "../../Contexts/ToastContext";
 
 interface chatRoomProps
 {
@@ -25,6 +26,7 @@ interface chatRoomProps
 export default function ChatRoom({isConnected, id}: chatRoomProps) {
   const { setMyGroups, user } = useContext(AuthContext);
   const screenWidth = useContext(ScreenWidthContext);
+  const { setToastColor, setToastIsOpen, setToastMessage } = useContext(ToastContext);
 
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -232,8 +234,16 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
         }
         return groupsCopy;
       });
+      //Open toast
+      setToastIsOpen(true);
+      setToastMessage("Chat room updated successfully!");
     }
     setIsEditChatName(false);
+  }
+
+  const handleDeleteChatRoom = async () => 
+  {
+    
   }
 
   useEffect(() => {
@@ -271,14 +281,19 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
           chatRoom={chatRoom} 
           setChatRoom={setChatRoom}/>
         <div className="actions-container">
-          {isTheOwner && (
-            !isEditChatName ? (
-              <i className="fas fa-edit talk" onClick={() => setIsEditChatName(true)}></i>
-            ) : (
-              <i onClick={handleUpdateChatRoom} className="fas fa-check"></i>
-            )
+          {isTheOwner ? (
+            <>
+              {!isEditChatName ? (
+                <i className="fas fa-edit talk" onClick={() => setIsEditChatName(true)}></i>
+              ) : (
+                <i onClick={handleUpdateChatRoom} className="fas fa-check"></i>
+              )}
+              <i className="fas fa-trash-alt"></i>
+            </> 
+          ): (
+            <i title="Leave" onClick={handleLeaveGroup} className="fas fa-sign-out-alt leave"></i>
           )}   
-          <i title="Leave" onClick={handleLeaveGroup} className="fas fa-sign-out-alt leave"></i>
+   
         </div>
       </div>
       <div className="chatroom-messages" ref={messagesRef}>

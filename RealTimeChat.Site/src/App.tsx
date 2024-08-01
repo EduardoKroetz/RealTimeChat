@@ -42,7 +42,6 @@ function App() {
       </Route>
       <Route path="/login" Component={LoginPage} />
       <Route path="/register" Component={RegisterPage} />
-
     </Routes>
   )
 }
