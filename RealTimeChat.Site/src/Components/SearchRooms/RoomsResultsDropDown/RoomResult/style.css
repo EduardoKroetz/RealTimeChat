@@ -1,0 +1,43 @@
+.room-search-result
+{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.room-search-result div
+{
+  color: gray;
+}
+
+.room-search-content
+{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.room-search-content > .created-at
+{
+  font-size: x-small;
+}
+
+i.join
+{
+  color: rgb(40, 167, 69);
+}
+
+i.talk
+{
+  color: rgb(0, 123, 255);
+}
+
+i.leave
+{
+  color: red;
+}
+
+.room-search-actions > i
+{
+  font-size: larger;
+}

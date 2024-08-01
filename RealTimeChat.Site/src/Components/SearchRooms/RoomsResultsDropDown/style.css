@@ -1,0 +1,29 @@
+.room-search-drop-down
+{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  gap: 1rem;
+  position: absolute;
+  padding: 1rem;
+  flex: 1;
+  border-radius: 5px;
+  top: 105%;
+  width: 80%;
+  visibility: hidden;
+  transition: visibility .2s ease, height 0.4s ease; 
+  overflow-y: auto;
+  min-height: 20px;
+  word-break: break-word;
+  z-index: 1;
+}
+
+.room-search-drop-down.open
+{
+  visibility: visible;
+}
+
+.not-found-chat-rooms
+{
+  color: gray;
+}
