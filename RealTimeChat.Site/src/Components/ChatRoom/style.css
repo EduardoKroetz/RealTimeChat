@@ -48,6 +48,15 @@
   scrollbar-color: white rgba(0, 0, 0, 0.729);
 }
 
+/* Chat room actions  */
+
+.actions-container
+{
+  display: flex;
+  gap: 2rem;
+  font-size: larger;
+}
+
 
 @media (min-width: 768px)
 {

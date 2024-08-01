@@ -41,3 +41,8 @@ i.leave
 {
   font-size: larger;
 }
+
+.room-search-actions i:hover
+{
+  color: var(--background-color);
+}

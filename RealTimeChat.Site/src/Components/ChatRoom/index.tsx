@@ -14,6 +14,7 @@ import IResponse from "../../Interfaces/IResponse";
 import { format,  isToday, isYesterday } from "date-fns";
 import { leaveChatRoom } from "../../services/leaveChatRoom";
 import { AuthContext } from "../../Contexts/AuthContext";
+import ChatName from "../ChatName";
 
 interface chatRoomProps
 {
@@ -22,18 +23,24 @@ interface chatRoomProps
 }
 
 export default function ChatRoom({isConnected, id}: chatRoomProps) {
+  const { setMyGroups, user } = useContext(AuthContext);
+  const screenWidth = useContext(ScreenWidthContext);
+
   const [chatRoom, setChatRoom] = useState<IChatRoom>();
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const screenWidth = useContext(ScreenWidthContext);
   const [currentGroupId, setCurrentGroupId] = useState<string | null>(null);
   const [chatRoomLoaded, setChatRoomLoaded] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [isLimitMessages, setIsLimitMessages] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [firstElement, setFirstElement] = useState<HTMLElement>(null!);
-  const { setMyGroups } = useContext(AuthContext);
+  const [isEditChatName, setIsEditChatName] = useState(false);
+  const [isTheOwner, setIsTheOwner] = useState(chatRoom?.createdBy === user?.id);
+
   const navigate = useNavigate();
   const messagesRef = useRef<HTMLDivElement>(null); 
+
+  const chatRoomInfoRef = useRef<HTMLDivElement>(null);
 
   // Get messages from chat room with pagination
   const GetMessagesFromChatRoom = async () => {
@@ -208,22 +215,71 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
       navigate("/")
     }
   }
+
+  
+  const handleUpdateChatRoom = async () => {
+    if (!chatRoom)
+      return
+    const response = await api.put(`/chatrooms/${chatRoom.id}?name=${chatRoom?.name}`)
+    if (response.status === 200)
+    {
+      setMyGroups((prevGroups) =>
+      {
+        const groupsCopy = [...prevGroups];
+        const index = groupsCopy.findIndex(x => x.id === chatRoom.id);
+        if (index !== -1) {
+          groupsCopy[index] = chatRoom;
+        }
+        return groupsCopy;
+      });
+    }
+    setIsEditChatName(false);
+  }
+
+  useEffect(() => {
+    if (chatRoom && user)
+      setIsTheOwner(chatRoom.createdBy === user.id);
+  }, [chatRoom, user])
+
   //Component
 
   if (!chatRoom && chatRoomLoaded) {
     return <h1 className="error-loading-chat-room">Erro ao carregar a sala de bate papo</h1>;
   }
 
+  //load empty container
+  if (!chatRoom)
+    return (
+      <div className="chatroom-container">
+        <div className="chatroom-info"></div>
+        <div className="chatroom-messages"></div>
+      </div>
+  )
+
   return (
     <div className="chatroom-container">
-      <div className="chatroom-info">
+      <div className="chatroom-info" ref={chatRoomInfoRef}>
         {screenWidth < 768 && (
           <Link to={"/"} >
             <i className="fas fa-arrow-left back-icon" title="Back"></i>
           </Link>
         )}           
-        <h2>{chatRoom?.name}</h2>
-        <i title="Leave" onClick={handleLeaveGroup} style={{marginRight: "25px"}} className="fas fa-sign-out-alt leave"></i>
+        <ChatName 
+          isEditChatName={isEditChatName} 
+          setIsEditChatName={setIsEditChatName} 
+          containerRef={chatRoomInfoRef} 
+          chatRoom={chatRoom} 
+          setChatRoom={setChatRoom}/>
+        <div className="actions-container">
+          {isTheOwner && (
+            !isEditChatName ? (
+              <i className="fas fa-edit talk" onClick={() => setIsEditChatName(true)}></i>
+            ) : (
+              <i onClick={handleUpdateChatRoom} className="fas fa-check"></i>
+            )
+          )}   
+          <i title="Leave" onClick={handleLeaveGroup} className="fas fa-sign-out-alt leave"></i>
+        </div>
       </div>
       <div className="chatroom-messages" ref={messagesRef}>
         <>

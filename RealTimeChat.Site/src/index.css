@@ -25,5 +25,5 @@ i:hover
 {
   transition: 190ms;
   cursor: pointer;
-  color: var(--background-color);
+  color: white;
 }

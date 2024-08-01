@@ -1,0 +1,9 @@
+
+.edit-chat-name-input
+{
+  color: var(--text-color);
+  padding: 6px;
+  border-radius: 3px;
+  outline: none;
+  border: 0;
+}
