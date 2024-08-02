@@ -98,13 +98,4 @@ public class ChatRoomsController : ControllerBase
         var result = await _mediator.Send(command);
         return Ok(result);
     }
-
-    [HttpGet("users")] 
-    public async Task<IActionResult> GetUserChatRooms()
-    {
-        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var query = new GetUserChatRoomsQuery { UserId = userId };
-        var result = await _mediator.Send(query);
-        return Ok(result);
-    }
 }

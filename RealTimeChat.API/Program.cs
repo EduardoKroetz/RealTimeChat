@@ -27,7 +27,6 @@ builder.Services.AddSwaggerGen();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.AddEventSourceLogger();
-
 builder.Services.AddMediatR(options => options.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly));
 
 LoadConfiguration(builder.Configuration);
@@ -41,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("Allow5173");
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
@@ -54,6 +53,8 @@ app.UseExceptionHandler();
 app.MapControllers();
 app.MapHub<ChatHub>("/chathub");
 
+app.Urls.Add("http://*:8080");
+
 app.Run();
 
 
@@ -61,6 +62,7 @@ void LoadConfiguration(IConfiguration configuration)
 {
     Configuration.JwtKey = configuration.GetValue<string>("JwtKey")!;
     Configuration.ConnectionString = configuration.GetConnectionString("DefaultConnection")!;
+    Configuration.DefaultFrontendBaseUrl = configuration.GetValue<string>("DefaultFrontendBaseUrl")!; //configuration to add cors
 }
 
 void ConfigureServices(IServiceCollection services)
@@ -68,10 +70,10 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddCors(options =>
     {
-        options.AddPolicy("Allow5173",
+        options.AddPolicy("AllowFrontend",
             builder =>
             {
-                builder.WithOrigins("http://localhost:5173")
+                builder.WithOrigins(Configuration.DefaultFrontendBaseUrl)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
@@ -88,7 +90,7 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddLogging();
 
-    //Injetando dependências
+    //Injetando dependï¿½ncias
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IChatRoomRepository, ChatRoomRepository>();

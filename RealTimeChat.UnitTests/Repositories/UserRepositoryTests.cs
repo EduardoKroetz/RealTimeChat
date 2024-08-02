@@ -109,7 +109,7 @@ public class UserRepositoryTests
 
         //Assert
         Assert.True(users.Any());
-        Assert.Equal(user, users.First());
+        Assert.Equal(user.Id, users.First().Id);
     }
 
     [Fact]

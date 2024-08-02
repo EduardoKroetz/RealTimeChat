@@ -115,7 +115,7 @@ public class ChatRoomRepositoryTests
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);
 
         // Act
-        var result = await _chatRoomRepository.GetMessagesInRoomAsync(chatRoomId);
+        var result = await _chatRoomRepository.GetMessagesInRoomAsync(0,10,chatRoomId);
 
         // Assert
         Assert.NotEmpty(result);

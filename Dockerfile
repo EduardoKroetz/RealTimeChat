@@ -8,17 +8,18 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY [".", "."]
+
+COPY [".", "./"]
 RUN dotnet restore "./RealTimeChat.sln"
-COPY . .
+
 WORKDIR "/src/."
 RUN dotnet build "./RealTimeChat.sln" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RealTimeChat.sln" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./RealTimeChat.API/RealTimeChat.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RealTimeChat.dll"]
+ENTRYPOINT ["dotnet", "RealTimeChat.API.dll"]
