@@ -55,8 +55,10 @@ public class ChatRoomsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] CreateChatRoomCommand command)
+    public async Task<IActionResult> AddAsync([FromQuery] string name)
     {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new CreateChatRoomCommand { Name = name, UserId = userId };
         var result = await _mediator.Send(command);
         return Ok(result);
     }
@@ -69,9 +71,11 @@ public class ChatRoomsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdatedAsync([FromBody] UpdateChatRoomCommand command)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdatedAsync([FromQuery] string name, [FromRoute] Guid id)
     {
+        var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var command = new UpdateChatRoomCommand { Id = id, Name = name, UserId = userId };
         var result = await _mediator.Send(command);
         return Ok(result);
     }

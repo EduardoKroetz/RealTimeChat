@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealTimeChat.Application.Queries.GetMessage;
 using RealTimeChat.Application.Queries.GetMessages;
@@ -7,6 +8,7 @@ namespace RealTimeChat.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MessagesController : ControllerBase
 {
     private readonly IMediator _mediator;

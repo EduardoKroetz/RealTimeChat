@@ -23,10 +23,15 @@ public class UpdateChatRoomCommandHandler : IRequestHandler<UpdateChatRoomComman
             throw new NotFoundException("Chat room not found");
         }
 
+        if (chatRoom.CreatedBy != request.UserId)
+        {
+            throw new UnauthorizedAccessException("You are not authorized to update the chat room");
+        }
+
         chatRoom.Name = request.Name;
 
         await _chatRoomRepository.UpdateAsync(chatRoom);
 
-        return ResultDTO.SuccessResult(new { id = chatRoom.Id }, "Chat room updated");
+        return ResultDTO.SuccessResult(new { id = chatRoom.Id }, "Chat room updated successfully!");
     }
 }
