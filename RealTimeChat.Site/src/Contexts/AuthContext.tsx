@@ -1,9 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import IUser from "../Interfaces/IUser";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 import IChatRoom from "../Interfaces/IChatRoom";
+import { ToastContext } from "./ToastContext";
 
 interface IAuthContextData
 {
@@ -21,12 +22,39 @@ const AuthContextProvider = ({children}: any) =>
   const [jwtToken, setJwtToken] = useState<string>("");
   const [user, setUser] = useState<IUser | null>(null);
   const [myGroups, setMyGroups] = useState<IChatRoom[]>([]);
+  const { setToastColor, setToastIsOpen, setToastMessage } = useContext(ToastContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   //Get token from cookie
   useEffect(() =>
   {
+    //check if response has status 401 and redirect to login page
+    api.interceptors.response.use(
+      response => {
+        return response;
+      },
+      error => {
+        if (error.response)
+        {
+          console.log("passou aqui na 66")
+          setToastIsOpen(true);
+          setToastColor("var(--accent-color)")
+          if (error.response.status === 401)
+          {
+            setToastMessage("You are not authorized to access this service, redirecting...")
+            setTimeout(() => navigate("/login"), 4000)
+          }
+          else
+          {
+            console.log("pass")
+            setToastMessage(error.response.data.message)
+          }
+        }
+        return Promise.reject(error);
+      }
+    )
+
     const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
 
     const getUser = async () =>{
@@ -51,31 +79,7 @@ const AuthContextProvider = ({children}: any) =>
           config.headers['Authorization'] = "Bearer " + token;        
           return config;
         },
-        function (error)
-        {
-          if (error.response)
-          {
-            if (error.response.status === 401)
-            {
-              navigate("/login")
-            }
-          }
-        }
       );
-
-      //check if response has status 401 and redirect to login page
-      api.interceptors.response.use(
-        response => {
-          return response;
-        },
-        error => {
-          if (error.response)
-          {
-            if (error.response.status === 401)
-              navigate("/login")
-          }
-        }
-      )
 
       if (!isLoginPage)
       {

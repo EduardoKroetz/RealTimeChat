@@ -7,3 +7,8 @@
   outline: none;
   border: 0;
 }
+
+.chat-name
+{
+  word-break: break-all;
+}

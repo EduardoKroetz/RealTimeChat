@@ -3,7 +3,8 @@
   margin: 0;
   color: white;
   font-family: sans-serif;
-
+  scrollbar-width: thin;
+  scrollbar-color: white rgba(0, 0, 0, 0.729);
 }
 
 :root {
@@ -12,12 +13,7 @@
   --accent-color: #e74c3c;
   --text-color: #333333;
   --background-color: #000000ba;
-  --secondary-background-color: rgba(128, 128, 128, 0.478);
-}
-
-div
-{
-  z-index: 1;
+  --secondary-background-color: rgb(94, 94, 94);
 }
 
 a
@@ -30,4 +26,14 @@ i:hover
   transition: 190ms;
   cursor: pointer;
   color: white;
+}
+
+.fa-edit
+{
+  color: var(--primary-color);
+}
+
+.fa-check-circle
+{
+  color: var(--secondary-color);
 }

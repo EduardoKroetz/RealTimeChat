@@ -24,7 +24,7 @@ interface chatRoomProps
 }
 
 export default function ChatRoom({isConnected, id}: chatRoomProps) {
-  const { setMyGroups, user } = useContext(AuthContext);
+  const { setMyGroups, myGroups, user } = useContext(AuthContext);
   const screenWidth = useContext(ScreenWidthContext);
   const { setToastColor, setToastIsOpen, setToastMessage } = useContext(ToastContext);
 
@@ -38,6 +38,7 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
   const [firstElement, setFirstElement] = useState<HTMLElement>(null!);
   const [isEditChatName, setIsEditChatName] = useState(false);
   const [isTheOwner, setIsTheOwner] = useState(chatRoom?.createdBy === user?.id);
+  const [isLoadingFirstMessages, setIsLoadingFirstMessages] = useState(true);
 
   const navigate = useNavigate();
   const messagesRef = useRef<HTMLDivElement>(null); 
@@ -109,6 +110,21 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
 
   }, [messages])
 
+  useEffect(() => 
+  {
+    if (myGroups && chatRoom)
+    {
+      const alreadyJoin = myGroups.find(x => x.id === chatRoom.id);
+      if (!alreadyJoin)
+        {
+          setToastIsOpen(true);
+          setToastColor("var(--accent-color)");
+          setToastMessage("You are not allowed to chat in rooms you have not entered");
+          navigate("/")
+        }
+    }
+  }, [myGroups, chatRoom])
+
   // Call API to get data
   useEffect(() => {
     const getAsync = async () => {
@@ -116,12 +132,16 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
       const response = await api.get(`/chatrooms/${id}`);
       if (response.status === 200)
       {
-        setChatRoom(response.data.data);
+        const chatRoom = response.data.data;
+        setChatRoom(chatRoom);
+
+
       }
       setChatRoomLoaded(true)
 
       // Get first 20 messages of chat room
       await GetMessagesFromChatRoom();
+      setIsLoadingFirstMessages(false);
 
       JoinGroup(id!);
     };
@@ -243,7 +263,17 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
 
   const handleDeleteChatRoom = async () => 
   {
-    
+    if (!chatRoom)
+      return
+    const response = await api.delete(`/chatrooms/${chatRoom.id}`)
+    if (response.status === 200)
+    {
+      setToastIsOpen(true);
+      setToastMessage("Chat room successfully deleted!")
+      setToastColor("var(--accent-color)")
+      setMyGroups((prevValue) => prevValue.filter((group) => group.id !== chatRoom.id))
+      navigate("/")
+    }
   }
 
   useEffect(() => {
@@ -288,7 +318,7 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
               ) : (
                 <i onClick={handleUpdateChatRoom} className="fas fa-check"></i>
               )}
-              <i className="fas fa-trash-alt"></i>
+              <i className="fas fa-trash-alt" onClick={handleDeleteChatRoom}></i>
             </> 
           ): (
             <i title="Leave" onClick={handleLeaveGroup} className="fas fa-sign-out-alt leave"></i>
@@ -298,9 +328,11 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
       </div>
       <div className="chatroom-messages" ref={messagesRef}>
         <>
+          {!isLoadingFirstMessages && messages.length === 0 && (
+            <h1 style={{margin: "auto"}}>Be the first to send a message!</h1>
+          )}
           {messages.map((msg, index) => (
             <div key={`${msg.id}-${msg.content}`}>
-              {}
               {(index === 0 || new Date(msg.timestamp).toDateString() !== new Date(messages[index - 1].timestamp).toDateString()) && 
                 renderDateDivider(msg.timestamp)}
               <Message 

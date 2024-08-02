@@ -9,8 +9,10 @@ import { leaveChatRoom } from "../../../../services/leaveChatRoom";
 
 export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom, setDropDownIsOpen: React.Dispatch<SetStateAction<boolean>> })
 {
+  const { user } = useContext(AuthContext);
   const [userAlreadyInGroup, setUserAlreadyInGroup] = useState(false);
   const { myGroups, setMyGroups } = useContext(AuthContext);
+  const [isOwner] = useState(user?.id === room.createdBy);
 
   const handleJoinGroup = async () => {
     const response = await api.post(`/chatrooms/join/${room.id}`)
@@ -50,7 +52,8 @@ export default function RoomResult({room, setDropDownIsOpen }: { room:IChatRoom,
       <div className="room-search-actions">
         {userAlreadyInGroup ? 
           <> 
-            <i title="Leave" onClick={handleLeaveGroup} style={{marginRight: "25px"}} className="fas fa-sign-out-alt leave"></i>
+            {!isOwner && 
+              <i title="Leave" onClick={handleLeaveGroup} style={{marginRight: "25px"}} className="fas fa-sign-out-alt leave"></i>}
             <Link to={`/chatrooms/${room.id}`} ><i title="Talk" className="fas fa-comments talk" onClick={() => setDropDownIsOpen(false)}></i></Link>
           </>
           :

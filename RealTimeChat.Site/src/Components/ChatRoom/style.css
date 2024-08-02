@@ -17,11 +17,6 @@
   justify-content: space-between;
 }
 
-.chatroom-info > i.leave
-{
-  font-size: larger;
-}
-
 .back-icon
 {
   padding: 8px;
@@ -44,8 +39,6 @@
   gap: .1rem;
   overflow-y: auto;
   flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: white rgba(0, 0, 0, 0.729);
 }
 
 /* Chat room actions  */

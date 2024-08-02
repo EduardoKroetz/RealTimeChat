@@ -6,6 +6,7 @@ import { ScreenWidthContext } from "../Contexts/ScreenWidthContext";
 import SearchRooms from "../Components/SearchRooms";
 import { AuthContext } from "../Contexts/AuthContext";
 import Toast from "../Components/Toast";
+import ChatRoomActions from "../Components/ChatRoomActions";
 
 
 export default function BaseLayout()
@@ -25,8 +26,18 @@ export default function BaseLayout()
         <SearchRooms />
       }
       <div className="main-content">
-        {isHomePage && <Conversations />}
-        {screenWidth >= 768 && !isHomePage && <Conversations />}
+        {isHomePage && (
+          <div className="chats">
+            <Conversations />
+            <ChatRoomActions />
+          </div>
+        )}
+        {screenWidth >= 768 && !isHomePage && (
+          <div className="chats">
+            <Conversations />
+            <ChatRoomActions />
+          </div>
+        )}
         <Outlet />
       </div>
       <Toast />

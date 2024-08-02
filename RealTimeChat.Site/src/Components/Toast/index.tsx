@@ -10,7 +10,7 @@ export default function Toast()
   {
     setToastIsOpen(false);
     setToastMessage("");
-    setToastColor("var(--secondary-color)");
+    setToastColor("");
   }
 
   useEffect(() =>
@@ -21,7 +21,7 @@ export default function Toast()
   
   return (
     <div className="toast-container">
-      <div className={`toast-content ${toastIsOpen ? "open" : ""}`} style={{color: toastColor != "" ? toastColor : ""}}>
+      <div className={`toast-content ${toastIsOpen ? "open" : ""}`} style={{backgroundColor: toastColor != "" ? toastColor : ""}}>
         <i className="fas fa-times" onClick={handleCloseToast}></i>
         <div>{toastMessage}</div>
       </div>

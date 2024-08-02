@@ -4,6 +4,8 @@
   padding: 1rem;
   border-radius: .3rem;
   margin: 10px;
+  word-break: break-all;
+  height: max-content;
 }
 
 .conversation-container:hover

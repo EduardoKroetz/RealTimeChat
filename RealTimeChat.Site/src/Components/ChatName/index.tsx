@@ -43,7 +43,7 @@ export default function ChatName({ isEditChatName, setIsEditChatName, containerR
         value={chatRoom.name} 
         onChange={(e) => setChatRoom({...chatRoom,name: e.target.value})}/> 
         ) : (
-          <h2>{chatRoom?.name}</h2>
+          <h2 className="chat-name">{chatRoom?.name}</h2>
         )}
 
     </>

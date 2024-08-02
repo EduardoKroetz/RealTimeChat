@@ -5,12 +5,15 @@ import { useContext, useState } from "react"
 import { AuthContext } from "../../Contexts/AuthContext";
 import Cookies from "js-cookie";
 import api from "../../api/axiosConfig";
+import Toast from "../../Components/Toast";
+import { ToastContext } from "../../Contexts/ToastContext";
 
 export default function LoginPage()
 {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const authContext = useContext(AuthContext);
+  const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
 
   const handleSubmit = async () =>
   {
@@ -20,7 +23,9 @@ export default function LoginPage()
       var token = response.data.data.token;
       authContext.setJwtToken(token)
       Cookies.set("JwtToken", token, { secure: true, sameSite: "Strict"})
-      window.location.pathname = "/"
+      setToastIsOpen(true);
+      setToastMessage("Login successfully! Redirecting...")
+      setTimeout(() => window.location.pathname = "/", 1000)
     }
   }  
 
@@ -58,6 +63,7 @@ export default function LoginPage()
           <button className="register-button">Register</button>
         </Link>
       </div>
+      <Toast />
     </div>
   )
 } 

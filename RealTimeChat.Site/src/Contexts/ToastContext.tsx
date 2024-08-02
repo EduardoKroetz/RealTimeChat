@@ -10,12 +10,12 @@ interface ToastProps
   setToastMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
-const ToastContext = createContext<ToastProps>({toastIsOpen: false, setToastIsOpen: null!, toastColor: "var(--secondary-color)", setToastColor: null!, toastMessage: "", setToastMessage: null! })
+const ToastContext = createContext<ToastProps>({toastIsOpen: false, setToastIsOpen: null!, toastColor: "", setToastColor: null!, toastMessage: "", setToastMessage: null! })
 
 const ToastContextProvider = ({children}: any) =>
 {
   const [toastIsOpen, setToastIsOpen] = useState(false);
-  const [toastColor, setToastColor] = useState("var(--secondary-color)");
+  const [toastColor, setToastColor] = useState("");
   const [toastMessage, setToastMessage] = useState("");
   
   return (
