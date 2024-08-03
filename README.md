@@ -24,6 +24,8 @@ RealTimeChat é uma aplicação de chat em tempo real com suporte a autenticaç�
 
 <h2 id="principais-funcionalidades-da-api">Principais Funcionalidades da API</h2> 
 
+Você pode importar uma coleção do postman que contém todos os endpoints já mapeados baixando o json [AQUI](https://github.com/EduardoKroetz/RealTimeChat/blob/main/RealTimeChat.postman_collection.json)
+
 ### 1. Autenticação de Usuário
 - **Registro de Usuário**  
   `POST /auth/register`  
