@@ -233,6 +233,8 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
     const leave = await leaveChatRoom(chatRoom.id);
     if (leave)
     {
+      setToastIsOpen(true);
+      setToastMessage("You have successfully left the chat room!")
       setMyGroups((prevValue) => prevValue.filter((group) => group.id !== chatRoom.id))
       navigate("/")
     }
@@ -270,7 +272,6 @@ export default function ChatRoom({isConnected, id}: chatRoomProps) {
     {
       setToastIsOpen(true);
       setToastMessage("Chat room successfully deleted!")
-      setToastColor("var(--accent-color)")
       setMyGroups((prevValue) => prevValue.filter((group) => group.id !== chatRoom.id))
       navigate("/")
     }

@@ -5,6 +5,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import hubConnection from "../../SignalR/hubConnection";
 import UpdateMessage from "./UpdateMessage";
 import { differenceInMinutes } from "date-fns";
+import { ToastContext } from "../../Contexts/ToastContext";
 
 interface IMessageProps extends IMessage
 {
@@ -17,6 +18,7 @@ export default function Message({ content, id, sender, senderId, timestamp, last
   const [messageContent, setMessageContent] = useState(content);
   const [updateMessage, setUpdateMessage] = useState(false);
   const { user } = useContext(AuthContext);
+  const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
   const [messageActionDropDown, setMessageActionDropDown] = useState(false);
   const [initialMessage] = useState(content);
   const messageRef = useRef<HTMLDivElement>(null)
@@ -31,6 +33,8 @@ export default function Message({ content, id, sender, senderId, timestamp, last
   const handleDeleteAction = async () =>
   {
     await hubConnection.invoke("DeleteMessageAsync", id);
+    setToastIsOpen(true);
+    setToastMessage("Message deleted successfully!")
     handleLeaveDropDown();
   }
 

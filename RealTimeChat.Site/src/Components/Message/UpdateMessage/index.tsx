@@ -1,6 +1,7 @@
-import { useEffect, useRef} from "react"
+import { useContext, useEffect, useRef} from "react"
 import "./style.css"
 import hubConnection from "../../../SignalR/hubConnection";
+import { ToastContext } from "../../../Contexts/ToastContext";
 
 export default function UpdateMessage(
   { messageId, 
@@ -14,10 +15,13 @@ export default function UpdateMessage(
     handleLeaveDropDown: () => void })
 {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
 
   const handleUpdateAction = async () =>
   {
     await hubConnection.invoke("UpdateMessageAsync", messageId, messageContent)
+    setToastIsOpen(true);
+    setToastMessage("Message updated successfully!")
     handleLeaveDropDown();
   }
 

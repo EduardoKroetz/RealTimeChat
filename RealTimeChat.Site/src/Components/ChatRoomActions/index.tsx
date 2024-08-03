@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import "./style.css"
 import api from "../../api/axiosConfig";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { ToastContext } from "../../Contexts/ToastContext";
 
 export default function ChatRoomActions()
 {
@@ -11,6 +12,7 @@ export default function ChatRoomActions()
   const [newChatName, setNewChatName] = useState("");
   const [createChatIsOpen, setCreateChatIsOpen] = useState(false);
   const { setMyGroups } = useContext(AuthContext);
+  const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
 
   const handleCreateChatRoom = async () =>
   {
@@ -21,6 +23,8 @@ export default function ChatRoomActions()
       if (getChatResponse.status === 200)
       {
         setMyGroups((prevValue) => [getChatResponse.data.data, ...prevValue])
+        setToastIsOpen(true);
+        setToastMessage("Chat room created successfully!");
       }
     }
   }

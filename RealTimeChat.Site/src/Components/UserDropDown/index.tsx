@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./style.css";
 import { format } from "date-fns";
 import Cookies from "js-cookie";
+import { ToastContext } from "../../Contexts/ToastContext";
 
 interface UserInfoProps {
   userInfoIsOpen: boolean;
@@ -17,9 +18,13 @@ export default function UserDropDown({
   userInfoIsOpen
 }: UserInfoProps) {
   const userInfoContainerRef = useRef<HTMLDivElement>(null);
+  const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
+
   const { user } = useContext(AuthContext);
 
   const handleLogout = () => {
+    setToastIsOpen(true);
+    setToastMessage("Sucessfully logout!")
     Cookies.set("JwtToken", "");
     window.location.pathname = "/login"
   }
