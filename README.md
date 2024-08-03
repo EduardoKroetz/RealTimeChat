@@ -196,7 +196,7 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
 
 4. **Executar o Frontend:**
     ```bash
-    npm start
+    npm run dev
     ```
 
     O frontend estará disponível em `http://localhost:5173` (ou outro endereço configurado).
