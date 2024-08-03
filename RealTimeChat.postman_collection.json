@@ -1,0 +1,403 @@
+{
+	"info": {
+		"_postman_id": "5f151580-147a-46a2-a904-1d956f8ebaec",
+		"name": "RealTimeChat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32118022"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"eduardo\",\r\n    \"password\":\"123\",\r\n    \"email\":\"eduardoo1@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"eduardo@gmail.com\",\r\n    \"password\":\"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ChatRoom",
+			"item": [
+				{
+					"name": "Create chat room",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms?name=sla",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "sla"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete chat room",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/044c6edf-e85a-455a-846d-59d4bfb783e3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"044c6edf-e85a-455a-846d-59d4bfb783e3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update chat room",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms?name=novoNome",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "novoNome"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get chat rooms",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"teste\",\r\n    \"userId\":\"375e8d22-7fb4-4eda-a29b-3ca83fb37366\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms?pageSize=10&pageNumber=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Join in the chat room",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/join/dec7f52d-b2ec-4a86-8fe5-9db645900505",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"join",
+								"dec7f52d-b2ec-4a86-8fe5-9db645900505"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Leave chat room",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/leave/c107dcb3-44c4-47b2-a867-39439b6891a2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"leave",
+								"c107dcb3-44c4-47b2-a867-39439b6891a2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user chat rooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/users/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get chat room by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/c107dcb3-44c4-47b2-a867-39439b6891a2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"c107dcb3-44c4-47b2-a867-39439b6891a2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get rooms by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/chatrooms/search?name=teste",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"chatrooms",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "teste"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Get chat room messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/messages/chatrooms/188522f5-8e3b-4eb4-85fd-d43d7473c4f0?pageSize=100&pageNumber=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"chatrooms",
+								"188522f5-8e3b-4eb4-85fd-d43d7473c4f0"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "100"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get message by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/messages/262da6de-5b58-452b-838d-15a7b15a6400",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"262da6de-5b58-452b-838d-15a7b15a6400"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImUwYzYwZjY4LWJmMWEtNDIzNi04MTYxLTk1NmExOTAzMDZiYiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImVkdWFyZG9AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsImV4cCI6MTcyMjU2MjUyOH0.viC3t20KDBx2JjhwrIacTVkoxI6uAqn1sk225_6rLeM",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://localhost:5088",
+			"type": "string"
+		}
+	]
+}
