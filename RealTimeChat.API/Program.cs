@@ -34,6 +34,13 @@ ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+// Aplica migrações automaticamente ao iniciar a aplicação
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<RealTimeChatDbContext>();
+    dbContext.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
