@@ -37,11 +37,11 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
-        <Route index Component={HomePage}/>
-        <Route path="/chatrooms/:id" Component={() => <ChatRoomWrapper isConnecte={isConnected}/>}/>
+        <Route index element={<HomePage />}/>
+        <Route path="/chatrooms/:id" element={<ChatRoomWrapper isConnecte={isConnected}/>}/>
       </Route>
-      <Route path="/login" Component={LoginPage} />
-      <Route path="/register" Component={RegisterPage} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
     </Routes>
   )
 }
