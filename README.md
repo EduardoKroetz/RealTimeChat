@@ -5,12 +5,17 @@
 [C#]: https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white
 [React]: https://img.shields.io/badge/React-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
 [SignalR]: https://img.shields.io/badge/SignalR-%23006B3F.svg?style=for-the-badge&logo=aspnet&logoColor=white
+[Docker]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Azure]: https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white
 
 ![.Net]
 ![React]
 ![SignalR]
 ![C#]
 ![SQLite]
+![Azure]
+![Docker]
+
 
 
 <p align="center">
