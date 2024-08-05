@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_instancee
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+  app:
+    image: eduardokroetz/realtimechat:latest
+    container_name: app
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Realtimechat;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+    ports:
+      - "8080:8080" # Ajuste conforme a porta que sua aplicação usa
+
+volumes:
+  sqlserverdata:

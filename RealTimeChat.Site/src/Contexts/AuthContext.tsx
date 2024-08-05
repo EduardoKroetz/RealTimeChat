@@ -37,7 +37,6 @@ const AuthContextProvider = ({children}: any) =>
       error => {
         if (error.response)
         {
-          console.log("passou aqui na 66")
           setToastIsOpen(true);
           setToastColor("var(--accent-color)")
           if (error.response.status === 401)
@@ -47,7 +46,6 @@ const AuthContextProvider = ({children}: any) =>
           }
           else
           {
-            console.log("pass")
             setToastMessage(error.response.data.message)
           }
         }
