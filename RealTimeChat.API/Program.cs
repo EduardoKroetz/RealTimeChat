@@ -13,10 +13,6 @@ using RealTimeChat.API.Middlewares;
 using RealTimeChat.API.SignalR;
 using System.Text.Json.Serialization;
 
-Console.WriteLine("API started...");
-await Task.Delay(30000);
-Console.WriteLine("Starting..................");
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -93,7 +89,7 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddDbContext<RealTimeChatDbContext>(opt =>
     {
-        opt.UseSqlServer(Configuration.ConnectionString);
+        opt.UseSqlite("Data Source=database.db");
     });
 
     services.AddExceptionHandler<GlobalExceptionHandler>();

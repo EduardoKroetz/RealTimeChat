@@ -3,7 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-
+/database.db
+/database.db-shm
+/database.db-wal
 /appsettings.json
 /appsettings.Development.json
 ./vs
