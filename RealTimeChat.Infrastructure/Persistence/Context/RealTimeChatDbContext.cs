@@ -10,20 +10,12 @@ public class RealTimeChatDbContext : DbContext
 
     public RealTimeChatDbContext(DbContextOptions<RealTimeChatDbContext> options) : base(options)
     {
-        ChangeTracker.LazyLoadingEnabled = false;
-        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     public virtual DbSet<ChatRoom> ChatRooms { get; set; }
     public virtual DbSet<Message> Messages { get; set; }
     public virtual DbSet<RoomParticipant> RoomParticipants { get; set; }
     public virtual DbSet<User> Users { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Data Source=database.db");
-        base.OnConfiguring(optionsBuilder);
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

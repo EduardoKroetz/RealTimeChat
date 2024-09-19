@@ -17,7 +17,7 @@ public class MessageRepositoryTests
 
         var messages = new List<Message>
         {
-            new Message { Id = Guid.NewGuid(), Content = "Hello", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.Now }
+            new Message { Id = Guid.NewGuid(), Content = "Hello", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow }
         }.AsQueryable();
 
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);
@@ -29,7 +29,7 @@ public class MessageRepositoryTests
     public async Task AddAsync_ShouldAddMessageToDatabase()
     {
         // Arrange
-        var message = new Message { Id = Guid.NewGuid(), Content = "New Message", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.Now };
+        var message = new Message { Id = Guid.NewGuid(), Content = "New Message", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow };
 
         var messages = new List<Message>().AsQueryable();
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);
@@ -46,7 +46,7 @@ public class MessageRepositoryTests
     public async Task UpdateAsync_ShouldUpdateMessageInDatabase()
     {
         // Arrange
-        var message = new Message { Id = Guid.NewGuid(), Content = "Old Message", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.Now };
+        var message = new Message { Id = Guid.NewGuid(), Content = "Old Message", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow };
 
         var messages = new List<Message>() { message }.AsQueryable();
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);
@@ -65,7 +65,7 @@ public class MessageRepositoryTests
     public async Task DeleteAsync_ShouldRemoveMessageFromDatabase()
     {
         // Arrange
-        var message = new Message { Id = Guid.NewGuid(), Content = "Message to Delete", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.Now };
+        var message = new Message { Id = Guid.NewGuid(), Content = "Message to Delete", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow };
 
         var messages = new List<Message>() { message }.AsQueryable();
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);

@@ -13,7 +13,11 @@ using RealTimeChat.API.Middlewares;
 using RealTimeChat.API.SignalR;
 using System.Text.Json.Serialization;
 
+await Task.Delay(30000);
+
 var builder = WebApplication.CreateBuilder(args);
+
+var databaseConnectionString = builder.Configuration.GetConnectionString("PostgreSQL") ?? throw new Exception("Invalid postgreSQL connection string");
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -48,8 +52,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
-
-app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -88,8 +90,8 @@ void ConfigureServices(IServiceCollection services)
     });
 
     services.AddDbContext<RealTimeChatDbContext>(opt =>
-    {
-        opt.UseSqlite("Data Source=database.db");
+        {
+        opt.UseNpgsql(databaseConnectionString);
     });
 
     services.AddExceptionHandler<GlobalExceptionHandler>();

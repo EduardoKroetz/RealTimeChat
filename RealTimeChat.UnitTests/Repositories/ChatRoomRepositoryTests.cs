@@ -21,8 +21,8 @@ public class ChatRoomRepositoryTests
             {
                 Id = Guid.NewGuid(),
                 Name = "General",
-                CreatedAt = DateTime.Now,
-                Messages = new List<Message> { new Message { Id = Guid.NewGuid(), Content = "Hello", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.Now } },
+                CreatedAt = DateTime.UtcNow,
+                Messages = new List<Message> { new Message { Id = Guid.NewGuid(), Content = "Hello", ChatRoomId = Guid.NewGuid(), SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow } },
                 RoomParticipants = new List<RoomParticipant> { new RoomParticipant { Id = Guid.NewGuid(), ChatRoomId = Guid.NewGuid(), UserId = Guid.NewGuid() } }
             }
         }.AsQueryable();
@@ -38,7 +38,7 @@ public class ChatRoomRepositoryTests
     public async Task AddAsync_ShouldAddChatRoomToDatabase()
     {
         // Arrange
-        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "New Chat Room", CreatedAt = DateTime.Now };
+        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "New Chat Room", CreatedAt = DateTime.UtcNow };
 
         var chatRooms = new List<ChatRoom>().AsQueryable();
         _mockContext.Setup(c => c.ChatRooms).ReturnsDbSet(chatRooms);
@@ -55,7 +55,7 @@ public class ChatRoomRepositoryTests
     public async Task DeleteAsync_ShouldRemoveChatRoomFromDatabase()
     {
         // Arrange
-        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room to Delete", CreatedAt = DateTime.Now };
+        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room to Delete", CreatedAt = DateTime.UtcNow };
 
         var chatRooms = new List<ChatRoom> { chatRoom }.AsQueryable();
         _mockContext.Setup(c => c.ChatRooms).ReturnsDbSet(chatRooms);
@@ -86,7 +86,7 @@ public class ChatRoomRepositoryTests
     public async Task UpdateAsync_ShouldUpdateChatRoomInDatabase()
     {
         // Arrange
-        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "Old Chat Room", CreatedAt = DateTime.Now };
+        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), Name = "Old Chat Room", CreatedAt = DateTime.UtcNow };
 
         var chatRooms = new List<ChatRoom> { chatRoom }.AsQueryable();
         _mockContext.Setup(c => c.ChatRooms).ReturnsDbSet(chatRooms);
@@ -108,8 +108,8 @@ public class ChatRoomRepositoryTests
         var chatRoomId = _mockContext.Object.ChatRooms.First().Id;
         var messages = new List<Message>
         {
-            new Message { Id = Guid.NewGuid(), Content = "First Message", ChatRoomId = chatRoomId, SenderId = Guid.NewGuid(), Timestamp = DateTime.Now },
-            new Message { Id = Guid.NewGuid(), Content = "Second Message", ChatRoomId = chatRoomId, SenderId = Guid.NewGuid(), Timestamp = DateTime.Now.AddMinutes(1) }
+            new Message { Id = Guid.NewGuid(), Content = "First Message", ChatRoomId = chatRoomId, SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow },
+            new Message { Id = Guid.NewGuid(), Content = "Second Message", ChatRoomId = chatRoomId, SenderId = Guid.NewGuid(), Timestamp = DateTime.UtcNow.AddMinutes(1) }
         }.AsQueryable();
 
         _mockContext.Setup(c => c.Messages).ReturnsDbSet(messages);
@@ -130,8 +130,8 @@ public class ChatRoomRepositoryTests
         var userId = Guid.NewGuid();
         var chatRooms = new List<ChatRoom>
         {
-            new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room 1", CreatedAt = DateTime.Now },
-            new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room 2", CreatedAt = DateTime.Now }
+            new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room 1", CreatedAt = DateTime.UtcNow },
+            new ChatRoom { Id = Guid.NewGuid(), Name = "Chat Room 2", CreatedAt = DateTime.UtcNow }
         };
 
         var roomParticipants = new List<RoomParticipant>

@@ -17,12 +17,12 @@ public class RoomParticipantRepositoryTests
 
         var users = new List<User>
         {
-            new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.Now, Email = "johndoe@gmail.com", PasswordHash = "" }
+            new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.UtcNow, Email = "johndoe@gmail.com", PasswordHash = "" }
         }.AsQueryable();
 
         var chatRooms = new List<ChatRoom>
         {
-            new ChatRoom { Id = Guid.NewGuid(), CreatedAt = DateTime.Now, CreatedBy = users.First().Id, Name = "ChatRoom" }
+            new ChatRoom { Id = Guid.NewGuid(), CreatedAt = DateTime.UtcNow, CreatedBy = users.First().Id, Name = "ChatRoom" }
         }.AsQueryable();
 
         var roomParticipants = new List<RoomParticipant>

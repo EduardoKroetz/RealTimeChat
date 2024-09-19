@@ -41,22 +41,30 @@ public class ChatHub : Hub
 
     public async Task SendMessageAsync(Guid chatRoomId, Guid userId,  string message)
     {
-        var chatMessage = new Message
+        try
         {
-            ChatRoomId = chatRoomId,
-            SenderId = userId,
-            Content = message,
-            Id = Guid.NewGuid(),
-            Timestamp = DateTime.Now,
-        };
+            var chatMessage = new Message
+            {
+                ChatRoomId = chatRoomId,
+                SenderId = userId,
+                Content = message,
+                Id = Guid.NewGuid(),
+                Timestamp = DateTime.UtcNow,
+            };
 
-        await _messageRepository.AddAsync(chatMessage);
+            await _messageRepository.AddAsync(chatMessage);
 
-        var user = await _userRepository.GetByIdAsync(userId) ?? throw new Exception("Sender not found");
-        chatMessage.Sender = new User{ Id = user.Id, Email = user.Email, Username = user.Username, CreatedAt = user.CreatedAt };
+            var user = await _userRepository.GetByIdAsync(userId) ?? throw new Exception("Sender not found");
+            chatMessage.Sender = new User { Id = user.Id, Email = user.Email, Username = user.Username, CreatedAt = user.CreatedAt };
 
-        await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", chatMessage);
-        _logger.LogInformation("Message sent successfully!");
+            await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", chatMessage);
+            _logger.LogInformation("Message sent successfully!");
+        }
+        catch(Exception e)
+        {
+            _logger.LogError($"{e.Message} - {e.InnerException}");
+        }
+
     }
 
     public async Task DeleteMessageAsync(Guid messageId)

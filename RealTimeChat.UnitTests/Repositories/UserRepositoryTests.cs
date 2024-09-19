@@ -17,7 +17,7 @@ public class UserRepositoryTests
 
         var users = new List<User>
         {
-            new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.Now, Email = "johndoe@gmail.com", PasswordHash = "" }
+            new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.UtcNow, Email = "johndoe@gmail.com", PasswordHash = "" }
         }.AsQueryable();
 
         _mockContext.Setup(c => c.Users).ReturnsDbSet(users);
@@ -43,7 +43,7 @@ public class UserRepositoryTests
     public async Task AddAsync_ShouldAddUserToDatabase()
     {
         //Arrange
-        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.Now, Email = "luana@gmail.com", PasswordHash = "" };
+        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.UtcNow, Email = "luana@gmail.com", PasswordHash = "" };
 
         var users = new List<User>().AsQueryable();
         _mockContext.Setup(c => c.Users).ReturnsDbSet(users);
@@ -60,7 +60,7 @@ public class UserRepositoryTests
     public async Task DeleteAsync_ShouldRemoveUserFromDatabase()
     {
         //Arrange
-        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.Now, Email = "luana@gmail.com", PasswordHash = "" };
+        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.UtcNow, Email = "luana@gmail.com", PasswordHash = "" };
 
         var users = new List<User>() { user }.AsQueryable();
         _mockContext.Setup(c => c.Users).ReturnsDbSet(users);
@@ -77,7 +77,7 @@ public class UserRepositoryTests
     public async Task UpdateAsync_ShouldUpdateUserInDatabase()
     {
         //Arrange
-        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.Now, Email = "luana@gmail.com", PasswordHash = "" };
+        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.UtcNow, Email = "luana@gmail.com", PasswordHash = "" };
 
         var users = new List<User>() { user } .AsQueryable();
         _mockContext.Setup(c => c.Users).ReturnsDbSet(users);
@@ -96,8 +96,8 @@ public class UserRepositoryTests
     public async Task GetUsersInChatRooms_ShouldReturnUsers()
     {
         //Arrange
-        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.Now, Email = "luana@gmail.com", PasswordHash = "" };
-        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), CreatedAt = DateTime.Now, CreatedBy = user.Id, CreatedByUser = user,Name = "ChatRoom"};
+        var user = new User { Id = Guid.NewGuid(), Username = "Luana", CreatedAt = DateTime.UtcNow, Email = "luana@gmail.com", PasswordHash = "" };
+        var chatRoom = new ChatRoom { Id = Guid.NewGuid(), CreatedAt = DateTime.UtcNow, CreatedBy = user.Id, CreatedByUser = user,Name = "ChatRoom"};
         var roomParticipant = new RoomParticipant { Id = Guid.NewGuid(),ChatRoom = chatRoom,ChatRoomId = chatRoom.Id, User = user,UserId = user.Id};
         
         _mockContext.Setup(c => c.Users).ReturnsDbSet(new List<User>() { user }.AsQueryable());
@@ -117,7 +117,7 @@ public class UserRepositoryTests
     {
         // Arrange
         var email = "johndoe@gmail.com";
-        var user = new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.Now, Email = email, PasswordHash = "" };
+        var user = new User { Id = Guid.NewGuid(), Username = "JohnDoe", CreatedAt = DateTime.UtcNow, Email = email, PasswordHash = "" };
 
         var users = new List<User> { user }.AsQueryable();
         _mockContext.Setup(c => c.Users).ReturnsDbSet(users);
