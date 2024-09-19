@@ -1,6 +1,5 @@
 # RealTimeChat
-
-[SQLite]: https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white
+[PostgreSQL]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
 [.Net]: https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white
 [C#]: https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white
 [React]: https://img.shields.io/badge/React-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
@@ -12,7 +11,7 @@
 ![React]
 ![SignalR]
 ![C#]
-![SQLite]
+![PostgreSQL]
 ![Azure]
 ![Docker]
 
@@ -110,7 +109,7 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
 - **React Router Dom**
 
 ### Banco de Dados
-- **SQLite**
+- **PostgreSQL**
 
 <h2 id="arquitetura">Arquitetura - CQRS</h2> 
 
@@ -151,6 +150,9 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
    {
      "JwtKey": "kfgkopwpocnAICklvgRItruYTAJnkALXaPOQiRYUeyxXJkaQaNcHghQAydq",
      "DefaultFrontendBaseUrl": "http://localhost:5173",
+     "ConnectionStrings": {
+       "PostgreSQL": "Host=localhost;Port=5432;Database=realtimechat;Username=realtimechat-admin;Password=realtimechat-123" //Garanta que o postgreSQL esteja sendo executado
+     },
    }
    ```
 
