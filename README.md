@@ -1,16 +1,21 @@
 # RealTimeChat
 
-[MicrosoftSQLServer]: https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white
+[SQLite]: https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white
 [.Net]: https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white
 [C#]: https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white
 [React]: https://img.shields.io/badge/React-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
 [SignalR]: https://img.shields.io/badge/SignalR-%23006B3F.svg?style=for-the-badge&logo=aspnet&logoColor=white
+[Docker]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Azure]: https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white
 
 ![.Net]
 ![React]
 ![SignalR]
 ![C#]
-![MicrosoftSQLServer]
+![SQLite]
+![Azure]
+![Docker]
+
 
 
 <p align="center">
@@ -105,7 +110,7 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
 - **React Router Dom**
 
 ### Banco de Dados
-- **SQL Server**
+- **SQLite**
 
 <h2 id="arquitetura">Arquitetura - CQRS</h2> 
 
@@ -138,19 +143,17 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
 - **Camada .IntegrationsTests** (Testes de integração)
 
 <h2 id="como-executar">Como Executar</h2> 
-
-### 1. Configuração do Banco de Dados
-1. **Instale o SQL Server** e configure uma instância local. Certifique-se de que o banco de dados `RealTimeChat` está disponível.
-
-2. **Configure a String de Conexão e o a chave JWT**:
-   No arquivo `appsettings.json` da pasta `.API`, verifique a configuração da string de conexão:
+2. **appsettings.json**:
+   No arquivo `appsettings.json` da pasta `.API` (crie este arquivo se não tiver), adicione as seguintes configurações:
+   
    ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Server=localhost,1433;Database=RealTimeChat;User ID=sa;Password=sua_senha;TrustServerCertificate=true"
-   },
-   "JwtKey":"kfgkopwpocnAICklvgRItruYTAJnkArXaqOQbRYUeyAXJkaXaNcVghfAydq",
-   "DefaultFrontendBaseUrl": "http://localhost:5173"
+   
+   {
+     "JwtKey": "kfgkopwpocnAICklvgRItruYTAJnkALXaPOQiRYUeyxXJkaQaNcHghQAydq",
+     "DefaultFrontendBaseUrl": "http://localhost:5173",
+   }
    ```
+
 ### Configuração do Backend
 
 1. **Navegue até a pasta `.API`:**
@@ -158,23 +161,12 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
     cd .API
     ```
 
-2. **Restaurar pacotes e construir o projeto:**
-    ```bash
-    dotnet restore
-    dotnet build
-    ```
-
-3. **Aplicar as Migrações do Entity Framework Core:**
-    ```bash
-    dotnet ef database update
-    ```
-
 4. **Executar o Backend:**
     ```bash
     dotnet run
     ```
 
-    A API estará disponível em `https://localhost:7136` ou em `http://localhost:5000` (ou outro endereço configurado em Properties/lauchSettings.json).
+    A API estará disponível em `http://localhost:8080` (ou outro endereço configurado em Properties/lauchSettings.json).
 
 ### Configuração do Frontend
 
@@ -191,7 +183,7 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
 3. **Configure o Frontend:**
     No arquivo `src/api/axiosConfig.ts`, ajuste a URL da API para apontar para o endereço do backend:
     ```javascript
-    export const baseUrl = "http://localhost:5000"; //ou outra URL onde a API está executando 
+    export const baseUrl = "http://localhost:8080"; //ou outra URL onde a API está executando 
     ```
 
 4. **Executar o Frontend:**
@@ -200,18 +192,3 @@ Obs: O projeto `.Client` pode ser usado para testar o hub via console.
     ```
 
     O frontend estará disponível em `http://localhost:5173` (ou outro endereço configurado).
-
-### Testando o Hub do SignalR pelo console
-
-1. **Navegue até a pasta `.Client`:**
-    ```bash
-    cd .Client
-    ```
-
-2. **Compile e execute o cliente de teste:**
-    ```bash
-    dotnet run
-    ```
-
-    Utilize o cliente para se conectar ao hub do SignalR e testar as funcionalidades de chat em tempo real.
-
