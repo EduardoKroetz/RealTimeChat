@@ -13,9 +13,14 @@ export default function ChatRoomActions()
   const [createChatIsOpen, setCreateChatIsOpen] = useState(false);
   const { setMyGroups } = useContext(AuthContext);
   const { setToastIsOpen, setToastMessage } = useContext(ToastContext);
+  const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateChatRoom = async () =>
   {
+    if (isCreating === true)
+      return;
+
+    setIsCreating(true);
     const response = await api.post(`/chatrooms?name=${newChatName}`)
     if (response.status === 200)
     {
@@ -27,6 +32,7 @@ export default function ChatRoomActions()
         setToastMessage("Chat room created successfully!");
       }
     }
+    setIsCreating(false);
   }
 
   const handleMouseEnter = () =>
@@ -65,21 +71,23 @@ export default function ChatRoomActions()
   return (
     <div 
       ref={containerRef} 
-      className="chat-room-actions-container">
+      className="chat-room-actions-container"> 
       <div 
-        title="New chat" 
-        onClick={() => setCreateChatIsOpen(true)}
-        onMouseEnter={handleMouseEnter} 
-        onMouseLeave={handleMouseLeave} 
-        className="new-room-container">
-        <i ref={icon1Ref} className="fas fa-users"></i> <i ref={icon2Ref} className="fas fa-plus"></i>
+          title="New chat" 
+          onClick={() => setCreateChatIsOpen(true)}
+          onMouseEnter={handleMouseEnter} 
+          onMouseLeave={handleMouseLeave} 
+          className="new-room-container">
+          <i ref={icon1Ref} className="fas fa-users"></i> <i ref={icon2Ref} className="fas fa-plus"></i>
       </div>
-      <div 
-        className={`create-chat-container ${createChatIsOpen ? "open" : ""}`}
-        >
-        <input onChange={(e) => setNewChatName(e.target.value)} type="text" className="create-chat-input" placeholder="New chat room name"/>
-        <i className="fas fa-plus create-chat-icon" onClick={handleCreateChatRoom}></i>
-      </div>
+      {isCreating ? <h4>Criando...</h4> : 
+        <div 
+          className={`create-chat-container ${createChatIsOpen ? "open" : ""}`}
+          >
+          <input onChange={(e) => setNewChatName(e.target.value)} type="text" className="create-chat-input" placeholder="New chat room name"/>
+          <i className="fas fa-plus create-chat-icon" style={{backgroundColor: isCreating ? "whitesmoke" : "",}} onClick={handleCreateChatRoom}></i>
+        </div>
+      }
     </div>
   )
 }

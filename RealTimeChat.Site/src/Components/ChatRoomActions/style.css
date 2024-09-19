@@ -78,3 +78,10 @@
   color: var(--primary-color);
   cursor: pointer;
 }
+
+.chat-icon-on-creating
+{
+  cursor: auto;
+  background-color: rgba(255, 255, 255, 0.419)smoke;
+}
+

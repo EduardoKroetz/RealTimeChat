@@ -13,12 +13,16 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
   const [newMessage, setNewMessage] = useState<string>("");
   const inputRef = useRef<any>();
   const { user } = useContext(AuthContext);
+  const [isSending, setIsSending] = useState(false);
 
   const SendMessage = async () => {
+    if (isSending) return
+    setIsSending(true);
     if (newMessage.trim() === '')
       return;
     await hubConnection.invoke("SendMessageAsync", chatRoomId, user?.id, newMessage);
     setNewMessage("");
+    setIsSending(false);
   }
 
   useEffect(()=>
@@ -45,7 +49,9 @@ export default function SendMessage({ chatRoomId }: ISendMessageProps)
         onChange={(e) => setNewMessage(e.target.value)}/>
       
       <button className="send-message-button" onClick={SendMessage}>
-        <img className="send-message-icon" src="/send-message-icon.png" alt="Enviar" />
+        {isSending ? <p>...</p> :
+          <img className="send-message-icon" src="/send-message-icon.png" alt="Enviar" />
+        }
       </button>
     </div>
   )
