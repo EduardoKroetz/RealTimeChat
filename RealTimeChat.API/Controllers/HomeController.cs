@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RealTimeChat.Application.Queries.GetUser;
+using RealTimeChat.Application.Queries.GetAllChatRooms;
 
 namespace RealTimeChat.API.Controllers;
 
@@ -18,8 +18,8 @@ public class HomeController : Controller
     [HttpHead("status")]
     public async Task<IActionResult> StatusAsync()
     {
-        var command = new GetUserQuery { UserId = Guid.NewGuid() };
-        await _mediator.Send(command);
+        var query = new GetChatRoomsQuery { PageSize = 1, PageNumber = 1 };
+        await _mediator.Send(query);
         return Ok("OK");
     }
 }
